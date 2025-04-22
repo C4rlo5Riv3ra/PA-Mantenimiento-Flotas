@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app',
 ]
 
 MIDDLEWARE = [
@@ -74,8 +75,12 @@ WSGI_APPLICATION = 'proyect.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'db_flotas', # nombre de la base de datos
+        'USER': 'admin_flotas', # remplazar por el usuario que se creo en postgres
+        'PASSWORD': '1234567', # remplazar por el password que se creo en postgres
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
