@@ -35,3 +35,4 @@ class Usuario(models.Model):
 
     class Meta:
         db_table = "usuario"
+        
