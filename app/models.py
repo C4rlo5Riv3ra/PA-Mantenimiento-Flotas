@@ -90,7 +90,7 @@ class TipoMantenimiento(models.Model):
 
     class Meta:
         db_table = 'tipo_mantenimiento'
-        rdering = ['id']
+        ordering = ['id']
 
 # Modelo Mantenimiento
 class Mantenimiento(models.Model):
@@ -104,4 +104,4 @@ class Mantenimiento(models.Model):
 
     class Meta:
         db_table = 'mantenimiento'
-        rdering = ['id']
+        ordering = ['id']
