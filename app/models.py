@@ -105,3 +105,36 @@ class Mantenimiento(models.Model):
     class Meta:
         db_table = 'mantenimiento'
         ordering = ['id']
+
+# Modelo AlertaMantenimiento
+class AlertaMantenimiento(models.Model):
+    id = models.UUIDField(primary_key=True)
+    id_vehiculo = models.ForeignKey(Vehiculo, on_delete=models.RESTRICT, null=False, related_name='vehiculo')
+    mensaje = models.CharField(max_length=250)
+    fecha_alerta = models.DateField()
+
+    class Meta:
+        db_table = 'alerta_mantenimiento'
+        ordering = ['id']
+
+# Modelo ServicioMantenimiento
+class ServicioMantenimiento(models.Model):
+    id = models.UUIDField(primary_key=True)
+    id_vehiculo = models.ForeignKey(Vehiculo, on_delete=models.RESTRICT, null=False, related_name='vehiculo')
+    description = models.CharField(max_length=250)
+
+    class Meta:
+        db_table = 'servicio_mantenimiento'
+        ordering = ['id']
+
+
+# Modelo DetalleMantenimiento
+class DetalleMantenimiento(models.Model):
+    id = models.UUIDField(primary_key=True)
+    id_vehiculo = models.ForeignKey(Vehiculo, on_delete=models.RESTRICT, null=False, related_name='vehiculo')
+    mantenimiento = models.ForeignKey(Mantenimiento, on_delete=models.CASCADE)
+    servicio = models.ForeignKey(ServicioMantenimiento, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'detalle_mantenimiento'
+        ordering = ['id']
