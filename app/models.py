@@ -1,7 +1,6 @@
 from django.db import models
-from proyect.choices import *
+from proyect.choices import estado_Conductor, estado_Usuario, estado_Vehiculo, estado_Asignacion, estado_Alerta, rol
 
-# Create your models here.
 
 # Modelo Persona
 class Persona(models.Model):
@@ -16,21 +15,32 @@ class Persona(models.Model):
         db_table = "persona"
         ordering = ['id']
 
+
 # Modelo Usuario
 class Usuario(models.Model):
     id = models.UUIDField(primary_key=True)
-    email = models.CharField(max_length=60, null=False)
+    email = models.CharField(max_length=60, null=False, unique=True)
     password = models.CharField(max_length=60, null=False)
-    id_rol = models.IntegerField(choices=rol)
-    id_person = models.ForeignKey(Persona, on_delete=models.RESTRICT, null=False, related_name='usuario')
+    id_rol = models.ForeignKey('Rol', on_delete=models.RESTRICT, null=False, related_name='usuarios')  # Relación con Rol
+    id_person = models.ForeignKey(Persona, on_delete=models.RESTRICT, null=False, related_name='usuarios')
     state = models.IntegerField(choices=estado_Usuario, default=estado_Usuario.ACTIVO)
     last_date_support = models.DateField(null=True, blank=True)
     next_date_support = models.DateField(null=True, blank=True)
 
-
     class Meta:
         db_table = "usuario"
         ordering = ['id']
+
+
+# Modelo Rol
+class Rol(models.Model):
+    id = models.UUIDField(primary_key=True)
+    name = models.CharField(max_length=20, unique=True)
+
+    class Meta:
+        db_table = "rol"
+        ordering = ['id']
+
 
 # Modelo Tipo Vehiculo
 class TipoVehiculo(models.Model):
@@ -41,6 +51,7 @@ class TipoVehiculo(models.Model):
         db_table = 'tipo_vehiculo'
         ordering = ['id']
 
+
 # Modelo Vehiculo
 class Vehiculo(models.Model):
     id = models.UUIDField(primary_key=True)
@@ -48,7 +59,7 @@ class Vehiculo(models.Model):
     marca = models.CharField(max_length=25)
     modelo = models.CharField(max_length=20)
     year = models.IntegerField()
-    id_tipo_vehiculo = models.ForeignKey(TipoVehiculo, on_delete=models.RESTRICT, null=False, related_name='tipo_vehiculo')
+    id_tipo_vehiculo = models.ForeignKey(TipoVehiculo, on_delete=models.RESTRICT, null=False, related_name='vehiculos')
     state = models.IntegerField(choices=estado_Vehiculo, default=estado_Vehiculo.NUEVO)
     current_kilometers = models.FloatField(default=0)
     last_date_support = models.DateField(null=True, blank=True)
@@ -58,30 +69,33 @@ class Vehiculo(models.Model):
         db_table = 'vehiculo'
         ordering = ['id']
 
+
 # Modelo Conductor
 class Conductor(models.Model):
     id = models.UUIDField(primary_key=True)
-    id_persona = models.ForeignKey(Persona, on_delete=models.RESTRICT, null=False, related_name='persona')
+    id_persona = models.ForeignKey(Persona, on_delete=models.RESTRICT, null=False, related_name='conductores')
     licence_drive = models.CharField(max_length=30)
     date_entry = models.DateField()
-    state = models.IntegerField(choices=estado_Conductor, default=estado_Conductor.NUEVO)
+    state = models.IntegerField(choices=estado_Conductor, default=estado_Conductor.DISPONIBLE)
 
     class Meta:
         db_table = 'conductor'
         ordering = ['id']
 
+
 # Modelo Asignacion
 class Asignacion(models.Model):
     id = models.UUIDField(primary_key=True)
-    id_vehiculo = models.ForeignKey(Vehiculo, on_delete=models.RESTRICT, null=False, related_name='vehiculo')
-    id_conductor = models.ForeignKey(Conductor, on_delete=models.RESTRICT, null=False, related_name='conductor')
+    id_vehiculo = models.ForeignKey(Vehiculo, on_delete=models.RESTRICT, null=False, related_name='asignaciones')
+    id_conductor = models.ForeignKey(Conductor, on_delete=models.RESTRICT, null=False, related_name='asignaciones')
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
-    state = models.IntegerField(choices=estado_Asignacion, default=estado_Asignacion.NUEVO)
+    state = models.IntegerField(choices=estado_Asignacion, default=estado_Asignacion.ACTIVA)
 
     class Meta:
         db_table = 'asignacion'
         ordering = ['id']
+
 
 # Modelo TipoMantenimiento
 class TipoMantenimiento(models.Model):
@@ -92,10 +106,11 @@ class TipoMantenimiento(models.Model):
         db_table = 'tipo_mantenimiento'
         ordering = ['id']
 
+
 # Modelo Mantenimiento
 class Mantenimiento(models.Model):
     id = models.UUIDField(primary_key=True)
-    id_vehiculo = models.ForeignKey(Vehiculo, on_delete=models.RESTRICT, null=False, related_name='vehiculo')
+    id_vehiculo = models.ForeignKey(Vehiculo, on_delete=models.RESTRICT, null=False, related_name='mantenimientos')
     description = models.CharField(max_length=250)
     date = models.DateField()
     kilometraje = models.FloatField()
@@ -106,10 +121,11 @@ class Mantenimiento(models.Model):
         db_table = 'mantenimiento'
         ordering = ['id']
 
+
 # Modelo AlertaMantenimiento
 class AlertaMantenimiento(models.Model):
     id = models.UUIDField(primary_key=True)
-    id_vehiculo = models.ForeignKey(Vehiculo, on_delete=models.RESTRICT, null=False, related_name='vehiculo')
+    id_vehiculo = models.ForeignKey(Vehiculo, on_delete=models.RESTRICT, null=False, related_name='alertas')
     mensaje = models.CharField(max_length=250)
     fecha_alerta = models.DateField()
 
@@ -117,10 +133,10 @@ class AlertaMantenimiento(models.Model):
         db_table = 'alerta_mantenimiento'
         ordering = ['id']
 
+
 # Modelo ServicioMantenimiento
 class ServicioMantenimiento(models.Model):
     id = models.UUIDField(primary_key=True)
-    id_vehiculo = models.ForeignKey(Vehiculo, on_delete=models.RESTRICT, null=False, related_name='vehiculo')
     description = models.CharField(max_length=250)
 
     class Meta:
@@ -131,9 +147,8 @@ class ServicioMantenimiento(models.Model):
 # Modelo DetalleMantenimiento
 class DetalleMantenimiento(models.Model):
     id = models.UUIDField(primary_key=True)
-    id_vehiculo = models.ForeignKey(Vehiculo, on_delete=models.RESTRICT, null=False, related_name='vehiculo')
-    mantenimiento = models.ForeignKey(Mantenimiento, on_delete=models.CASCADE)
-    servicio = models.ForeignKey(ServicioMantenimiento, on_delete=models.CASCADE)
+    mantenimiento = models.ForeignKey(Mantenimiento, on_delete=models.CASCADE, related_name='detalles')
+    servicio = models.ForeignKey(ServicioMantenimiento, on_delete=models.CASCADE, related_name='detalles')
 
     class Meta:
         db_table = 'detalle_mantenimiento'
