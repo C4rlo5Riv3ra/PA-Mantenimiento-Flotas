@@ -1,12 +1,10 @@
 from django.db import models
 
-
 class estado_Usuario(models.IntegerChoices):
     ACTIVO = 1, 'Activo'
     INACTIVO = 2, 'Inactivo'
-    PENDIENTE = 3, 'Pendiente'
+    PENDIENTE = 3 ,'Pendiente'
     SUSPENDIDO = 4, 'Suspendido'
-
 
 class estado_Conductor(models.IntegerChoices):
     DISPONIBLE = 1, 'Disponible'
@@ -14,11 +12,10 @@ class estado_Conductor(models.IntegerChoices):
     DE_BAJA = 3, 'De baja'
     SUSPENDIDO = 4, 'Suspendido'
 
-
+# clase vehiculo aun no esta implementada en la base de datos
 class estado_Vehiculo(models.IntegerChoices):
     NUEVO = 1, 'Nuevo'
     DETERIORADO = 2, 'Deteriorado'
-
 
 class estado_Asignacion(models.IntegerChoices):
     ACTIVA = 1, 'Activa'
@@ -26,13 +23,11 @@ class estado_Asignacion(models.IntegerChoices):
     PENDIENTE = 3, 'Pendiente'
     CANCELADA = 4, 'Cancelada'
 
-
 class estado_Alerta(models.IntegerChoices):
     ATENTIDA = 1, 'Atentida'
     PENDIENTE = 2, 'Pendiente'
     CANCELADA = 3, 'Cancelada'
     VENCIDA = 4, 'Vencida'
-
 
 class rol(models.IntegerChoices):
     CONDUCTOR = 1, 'Conductor'
