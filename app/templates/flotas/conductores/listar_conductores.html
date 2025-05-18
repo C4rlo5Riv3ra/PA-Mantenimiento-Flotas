@@ -1,0 +1,30 @@
+{% extends 'flotas/base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Lista de Conductores</h2>
+<a href="{% url 'crear_conductor' %}" class="btn btn-success mb-3">Agregar Conductor</a>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead class="table-primary">
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in conductores %}
+            <tr>
+                <td>{{ c.id_persona.name }}</td>
+                <td>{{ c.id_persona.lastname }}</td>
+                <td>
+                    <a href="{% url 'editar_conductor' c.id %}" class="btn btn-sm btn-warning">Editar</a>
+                    <a href="{% url 'eliminar_conductor' c.id %}" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro?')">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'flotas/base.html' %}
+
+{% block content %}
+<h1>Lista de Vehículos</h1>
+
+<a href="{% url 'crear_vehiculo' %}" class="btn btn-success mb-3">Agregar Nuevo</a>
+
+<ul class="list-group">
+    {% for v in vehiculos %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ v.placa }} - {{ v.marca }} - {{ v.modelo }}
+            <div>
+                <!-- Botón Editar -->
+                <a href="{% url 'editar_vehiculo' v.id %}" class="btn btn-sm btn-warning">Editar</a>
+
+                <!-- Formulario para Eliminar -->
+                <form action="{% url 'eliminar_vehiculo' v.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este vehículo?')">
+                        Eliminar
+                    </button>
+                </form>
+            </div>
+        </li>
+    {% empty %}
+        <li class="list-group-item">No hay vehículos registrados.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

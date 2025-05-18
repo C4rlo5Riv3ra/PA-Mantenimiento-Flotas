@@ -23,6 +23,12 @@ class estado_Asignacion(models.IntegerChoices):
     PENDIENTE = 3, 'Pendiente'
     CANCELADA = 4, 'Cancelada'
 
+
+class TMantenimiento(models.IntegerChoices):
+    PREVENTIVO = 1, 'Preventivo'
+    CORRECTIVO = 2, 'Correctivo'
+    GENERAL = 3, 'General'
+
 class estado_Alerta(models.IntegerChoices):
     ATENTIDA = 1, 'Atentida'
     PENDIENTE = 2, 'Pendiente'
