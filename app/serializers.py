@@ -1,14 +1,9 @@
 from rest_framework import serializers
 from .models import (
-    Persona, Usuario, TipoVehiculo, Vehiculo, Conductor, Asignacion,
+    Usuario, TipoVehiculo, Vehiculo, Conductor, Asignacion,
     TipoMantenimiento, Mantenimiento, AlertaMantenimiento,
     ServicioMantenimiento, DetalleMantenimiento
 )
-
-class PersonaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Persona
-        fields = '__all__'
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:

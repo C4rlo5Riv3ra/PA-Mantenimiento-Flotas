@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .views import *
 from uuid import UUID
 router = DefaultRouter()
-router.register(r'personas', PersonaViewSet)
+'''router.register(r'personas', PersonaViewSet)'''
 router.register(r'usuarios', UsuarioViewSet)
 router.register(r'tipos-vehiculo', TipoVehiculoViewSet)
 router.register(r'vehiculos', VehiculoViewSet)
@@ -21,7 +21,7 @@ urlpatterns = [
 
     path('api/', include(router.urls)),# para ver apis del django rest framework
 
-
+    
     #VEHICULOS
     path('vehiculos/', listar_vehiculos, name='listar_vehiculos'),
     path('vehiculos/nuevo/', crear_vehiculo, name='crear_vehiculo'),
@@ -40,12 +40,10 @@ urlpatterns = [
     path('mantenimientos/editar/<uuid:id>/', editar_mantenimiento, name='editar_mantenimiento'),
     path('mantenimientos/eliminar/<uuid:id>/', eliminar_mantenimiento, name='eliminar_mantenimiento'),
 
+    #ALERTAS
     path('alertas/', listar_alertas, name='listar_alertas'),
     path('alertas/editar/<uuid:alerta_id>/', editar_alerta, name='editar_alerta'),
-
     path('alertas/eliminar/<uuid:alerta_id>/', eliminar_alerta, name='eliminar_alerta'),
-
-
     path('vehiculos/<uuid:vehiculo_id>/historial/', historial_mantenimiento, name='historial_mantenimiento'),
 
 ]

@@ -5,13 +5,21 @@ from app.utils import generar_alertas
 from .models import  Vehiculo, Conductor, Mantenimiento, AlertaMantenimiento, ServicioMantenimiento, DetalleMantenimiento, Asignacion
 from .serializers import *
 from .forms import AlertaForm, VehiculoForm, ConductorForm, MantenimientoForm 
+from django.core.paginator import Paginator
+
+
 # Vistas para modelos principales
 def index(request):
     return render(request, "flotas/index.html")
 
 #VISTAS DE VEHICULOS
 def listar_vehiculos(request):
-    vehiculos = Vehiculo.objects.all()
+    vehiculos_list = Vehiculo.objects.all().order_by('placa')  # Ordena por placa o por lo que prefieras
+    paginator = Paginator(vehiculos_list, 5)  # Muestra 10 vehículos por página
+
+    page_number = request.GET.get('page')
+    vehiculos = paginator.get_page(page_number)  # obtiene la página correspondiente (o la 1 por defecto)
+
     return render(request, 'flotas/vehiculos/listar_vehiculos.html', {'vehiculos': vehiculos})
 
 def crear_vehiculo(request):
@@ -23,6 +31,8 @@ def crear_vehiculo(request):
     else:
         form = VehiculoForm()
     return render(request, 'flotas/vehiculos/crear_vehiculo.html', {'form': form})
+
+
 def editar_vehiculo(request, id):
     vehiculo = get_object_or_404(Vehiculo, id=id)
     if request.method == 'POST':
@@ -33,6 +43,8 @@ def editar_vehiculo(request, id):
     else:
         form = VehiculoForm(instance=vehiculo)
     return render(request, 'flotas/vehiculos/editar_vehiculo.html', {'form': form})
+
+
 def eliminar_vehiculo(request, id):
     vehiculo = get_object_or_404(Vehiculo, id=id)
     if request.method == 'POST':
@@ -42,10 +54,10 @@ def eliminar_vehiculo(request, id):
 
 
 #VISTAS DE CONDUCTORES
-
 def listar_conductores(request):
     conductores = Conductor.objects.all()
     return render(request, 'flotas/conductores/listar_conductores.html', {'conductores': conductores})
+
 
 def crear_conductor(request):
     if request.method == 'POST':
@@ -57,8 +69,9 @@ def crear_conductor(request):
         form = ConductorForm()
     return render(request, 'flotas/conductores/crear_conductor.html', {'form': form})
 
+
 def editar_conductor(request, id):
-    conductor = get_object_or_404(Conductor, id=id)
+    conductor = get_object_or_404(Conductor, pk=id)
     if request.method == 'POST':
         form = ConductorForm(request.POST, instance=conductor)
         if form.is_valid():
@@ -68,13 +81,11 @@ def editar_conductor(request, id):
         form = ConductorForm(instance=conductor)
     return render(request, 'flotas/conductores/editar_conductor.html', {'form': form})
 
+
 def eliminar_conductor(request, id):
     conductor = get_object_or_404(Conductor, id=id)
     conductor.delete()
     return redirect('listar_conductores')
-
-
-
 
 #VISTAS DE MANTENIMIENTOS
 def listar_mantenimientos(request):
@@ -113,12 +124,10 @@ def eliminar_mantenimiento(request, id):
     return render(request, 'flotas/mantenimientos/eliminar_mantenimiento.html', {'mantenimiento': mantenimiento})
 
 
-
 def listar_alertas(request):
     generar_alertas()  # genera o actualiza las alertas
     alertas = AlertaMantenimiento.objects.all().order_by('-fecha_alerta')
     return render(request, 'flotas/alertas/listar_alertas.html', {'alertas': alertas})
-
 
 
 def editar_alerta(request, alerta_id):
@@ -132,12 +141,13 @@ def editar_alerta(request, alerta_id):
         form = AlertaForm(instance=alerta)
     return render(request, 'flotas/alertas/editar_alerta.html', {'form': form})
 
+
 def eliminar_alerta(request, alerta_id):
     alerta = get_object_or_404(AlertaMantenimiento, id=alerta_id)
     if request.method == 'POST':
         alerta.delete()
-        return redirect('listar_alertas')
-    return render(request, 'flotas/alertas/eliminar_alerta.html', {'alerta': alerta})
+    return redirect('listar_alertas')
+
 
 def historial_mantenimiento(request, vehiculo_id):
     vehiculo = get_object_or_404(Vehiculo, id=vehiculo_id)
@@ -178,9 +188,9 @@ def historial_mantenimiento(request, vehiculo_id):
 
 #DJANGO REST FRAMWORK
 
-class PersonaViewSet(viewsets.ModelViewSet):
+'''class PersonaViewSet(viewsets.ModelViewSet):
     queryset = Persona.objects.all()
-    serializer_class = PersonaSerializer
+    serializer_class = PersonaSerializer'''
 
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()

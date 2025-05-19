@@ -1,34 +1,50 @@
 {% extends 'flotas/base.html' %}
+
 {% block content %}
-<h2>Alertas de Mantenimiento</h2>
-<table class="table table-bordered">
-    <thead class="table-danger">
-        <tr>
-            <th>Vehículo</th>
-            <th>Mensaje</th>
-            <th>Fecha de Alerta</th>
-            <th>Proximo mantenimiento</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for alerta in alertas %}
-        <tr>
+<div class="container py-4">
+  <h2 class="mb-4 text-danger fw-bold">
+    <i class="bi bi-exclamation-triangle-fill"></i> Alertas de Mantenimiento
+  </h2>
+
+  {% if alertas %}
+    <div class="table-responsive">
+      <table class="table table-hover align-middle shadow-sm">
+        <thead class="table-danger">
+          <tr>
+            <th><i class="bi bi-truck-front-fill"></i> Vehículo</th>
+            <th><i class="bi bi-chat-left-text-fill"></i> Mensaje</th>
+            <th><i class="bi bi-calendar-event-fill"></i> Fecha de Alerta</th>
+            <th><i class="bi bi-calendar-check-fill"></i> Próximo Mantenimiento</th>
+            <th><i class="bi bi-gear-fill"></i> Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for alerta in alertas %}
+          <tr>
             <td>{{ alerta.id_vehiculo.placa }}</td>
             <td>{{ alerta.mensaje }}</td>
             <td>{{ alerta.fecha_alerta }}</td>
             <td>{{ alerta.id_vehiculo.next_date_support }}</td>
-            
             <td>
-                <a href="{% url 'editar_alerta' alerta.id %}" class="btn btn-sm btn-warning">Editar</a>
-                <a href="{% url 'eliminar_alerta' alerta.id %}" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro?')">Eliminar</a>
+              <a href="{% url 'editar_alerta' alerta.id %}" class="btn btn-sm btn-warning fw-bold">
+                <i class="bi bi-pencil-square"></i> Editar
+              </a>
+              <form action="{% url 'eliminar_alerta' alerta.id %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-danger fw-bold" onclick="return confirm('¿Estás seguro de eliminar esta alerta?')">
+                  <i class="bi bi-trash3-fill"></i> Eliminar
+                </button>
+              </form>
             </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="4">No hay alertas generadas.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center" role="alert">
+      <i class="bi bi-info-circle-fill"></i> No hay alertas generadas.
+    </div>
+  {% endif %}
+</div>
 {% endblock %}

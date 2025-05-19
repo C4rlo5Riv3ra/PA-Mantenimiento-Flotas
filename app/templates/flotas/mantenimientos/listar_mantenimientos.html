@@ -12,19 +12,32 @@
                 <th>Vehículo</th>
                 <th>Descripción</th>
                 <th>Fecha</th>
+                <th>Kilometraje</th>
+                <th>Costo (S/)</th>
+                <th>Taller</th>
+                <th>Fecha Programada</th>
+                <th>KM Programado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             {% for m in mantenimientos %}
             <tr>
-                <td>{{ m.tipo }}</td>
+                <td>{{ m.get_tipo_display }}</td>
                 <td>{{ m.id_vehiculo.placa }}</td>
                 <td>{{ m.description }}</td>
                 <td>{{ m.date }}</td>
+                <td>{{ m.kilometraje }}</td>
+                <td>{{ m.costo }}</td>
+                <td>{{ m.workshop }}</td>
+                <td>{{ m.fecha_programada|default:"—" }}</td>
+                <td>{{ m.km_programado|default:"—" }}</td>
                 <td>
                     <a href="{% url 'editar_mantenimiento' m.id %}" class="btn btn-sm btn-warning">Editar</a>
-                    <a href="{% url 'eliminar_mantenimiento' m.id %}" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro?')">Eliminar</a>
+                    <form action="{% url 'eliminar_mantenimiento' m.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este mantenimiento?')">Eliminar</button>
+                    </form>
                 </td>
             </tr>
             {% endfor %}

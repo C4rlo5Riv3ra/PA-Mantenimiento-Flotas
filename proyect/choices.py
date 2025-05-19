@@ -16,6 +16,8 @@ class estado_Conductor(models.IntegerChoices):
 class estado_Vehiculo(models.IntegerChoices):
     NUEVO = 1, 'Nuevo'
     DETERIORADO = 2, 'Deteriorado'
+    USADO = 3, 'Usado'
+    REPARADO = 4, 'Reparado'
 
 class estado_Asignacion(models.IntegerChoices):
     ACTIVA = 1, 'Activa'

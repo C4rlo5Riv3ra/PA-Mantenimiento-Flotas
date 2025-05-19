@@ -1,10 +1,39 @@
 {% extends 'flotas/base.html' %}
 
 {% block content %}
-<h1>Registrar Mantenimiento</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Guardar</button>
-</form>
+<div class="container py-4">
+  <h1 class="mb-4 text-success fw-bold">
+    <i class="bi bi-wrench-adjustable-circle"></i> Registrar Mantenimiento
+  </h1>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="row g-3">
+          {% for field in form %}
+            <div class="col-md-6">
+              <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
+                {{ field.label }}
+              </label>
+              {{ field }}
+              {% if field.errors %}
+                <div class="text-danger small">{{ field.errors|join:", " }}</div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="mt-4 d-flex justify-content-end gap-2">
+          <a href="{% url 'listar_mantenimientos' %}" class="btn btn-primary fw-bold">
+            <i class="bi bi-arrow-left-circle"></i> Cancelar
+          </a>
+          <button type="submit" class="btn btn-success fw-bold">
+            <i class="bi bi-check-circle"></i> Guardar Mantenimiento
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock %}

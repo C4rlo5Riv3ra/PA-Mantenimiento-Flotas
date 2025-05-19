@@ -1,26 +1,58 @@
 {% extends 'flotas/base.html' %}
 
 {% block content %}
-<h2>Historial de Mantenimientos - {{ vehiculo.placa }}</h2>
+<div class="container py-4">
+  <h2 class="mb-4 text-primary fw-bold">
+    <i class="bi bi-clock-history"></i> Historial de Mantenimientos - {{ vehiculo.placa }}
+  </h2>
 
-{% if mantenimientos %}
-    <ul>
-    {% for mantenimiento in mantenimientos %}
-        <li>
-            <strong>{{ mantenimiento.get_tipo_display }}:</strong> {{ mantenimiento.description }} <br>
-            Fecha: {{ mantenimiento.date }} | Kilometraje: {{ mantenimiento.kilometraje }} km | Costo: S/. {{ mantenimiento.costo }}<br>
-            Taller: {{ mantenimiento.workshop }}
-            <ul>
-                {% for detalle in mantenimiento.detalles.all %}
-                    <li>Servicio: {{ detalle.servicio.description }}</li>
-                {% endfor %}
-            </ul>
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No hay mantenimientos registrados para este vehículo.</p>
-{% endif %}
+  {% if mantenimientos %}
+    <div class="table-responsive shadow-sm rounded">
+      <table class="table table-striped table-hover align-middle text-center">
+        <thead class="table-primary">
+          <tr>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Fecha</th>
+            <th>Kilometraje (km)</th>
+            <th>Costo (S/.)</th>
+            <th>Taller</th>
+            <th>Servicios</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for mantenimiento in mantenimientos %}
+            <tr>
+              <td>{{ mantenimiento.get_tipo_display }}</td>
+              <td>{{ mantenimiento.description }}</td>
+              <td>{{ mantenimiento.date|date:"d/m/Y" }}</td>
+              <td>{{ mantenimiento.kilometraje }}</td>
+              <td>S/. {{ mantenimiento.costo }}</td>
+              <td>{{ mantenimiento.workshop }}</td>
+              <td>
+                {% if mantenimiento.detalles.all %}
+                  <ul class="list-unstyled mb-0 text-start">
+                    {% for detalle in mantenimiento.detalles.all %}
+                      <li>• {{ detalle.servicio.description }}</li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  -
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-muted fst-italic">No hay mantenimientos registrados para este vehículo.</p>
+  {% endif %}
 
-<a href="{% url 'listar_vehiculos' %}">← Volver a vehículos</a>
+  <div class="d-flex justify-content-end mt-3">
+    <a href="{% url 'listar_vehiculos' %}" class="btn btn-primary fw-bold">
+      <i class="bi bi-arrow-left-circle"></i> Volver a vehículos
+    </a>
+  </div>
+</div>
 {% endblock %}

@@ -1,35 +1,17 @@
 import uuid
 from django.db import models
+from django.utils import timezone
 from proyect.choices import *
 
-# Modelo Persona
-
-
-class Persona(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=50)
-    lastname = models.CharField(max_length=50)
-    doc_identity = models.CharField(max_length=8, unique=True)
-    phone = models.CharField(max_length=10)
-    address = models.CharField(max_length=80)
-
-    class Meta:
-        db_table = "persona"
-        ordering = ['id']
-
-    def __str__(self):
-        return self.name
 
 # Modelo Usuario
-
-
 class Usuario(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.CharField(max_length=60, null=False)
     password = models.CharField(max_length=60, null=False)
     id_rol = models.IntegerField(choices=rol)
-    id_person = models.ForeignKey(
-        Persona, on_delete=models.RESTRICT, null=False, related_name='usuarios')
+    '''id_person = models.ForeignKey(
+        Persona, on_delete=models.RESTRICT, null=False, related_name='usuarios')'''
     state = models.IntegerField(
         choices=estado_Usuario, default=estado_Usuario.ACTIVO)
     last_date_support = models.DateField(null=True, blank=True)
@@ -40,8 +22,6 @@ class Usuario(models.Model):
         ordering = ['id']
 
 # Modelo Tipo Vehiculo
-
-
 class TipoVehiculo(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=30, unique=True)
@@ -54,8 +34,6 @@ class TipoVehiculo(models.Model):
         return self.name
 
 # Modelo Vehiculo
-
-
 class Vehiculo(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     placa = models.CharField(max_length=15, unique=True)
@@ -77,28 +55,27 @@ class Vehiculo(models.Model):
     def __str__(self):
         return self.placa
 
-# Modelo Conductor
-
-
 class Conductor(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    id_persona = models.ForeignKey(
-        Persona, on_delete=models.RESTRICT, null=False, related_name='conductores')
+
+    name = models.CharField(max_length=50)
+    lastname = models.CharField(max_length=100)
+    doc_identity = models.CharField(max_length=20)
+    phone = models.CharField(max_length=10)
+    address = models.CharField(max_length=255)
     licence_drive = models.CharField(max_length=30)
-    date_entry = models.DateField()
-    state = models.IntegerField(
-        choices=estado_Conductor, default=estado_Conductor.DISPONIBLE)
+    date_entry = models.DateField(default=timezone.now)
+    state = models.IntegerField(choices=estado_Conductor, default=1)
 
     class Meta:
         db_table = 'conductor'
         ordering = ['id']
+
     def __str__(self):
-            return f"{self.id_persona.name} {self.id_persona.lastname}"
-    
+        return f"{self.name} {self.lastname}"
+ 
 
 # Modelo Asignacion
-
-
 class Asignacion(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     id_vehiculo = models.ForeignKey(
@@ -115,8 +92,6 @@ class Asignacion(models.Model):
         ordering = ['id']
 
 # Modelo TipoMantenimiento
-
-
 class TipoMantenimiento(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200, unique=True)
@@ -126,8 +101,6 @@ class TipoMantenimiento(models.Model):
         ordering = ['id']
 
 # Modelo Mantenimiento
-
-
 class Mantenimiento(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     id_vehiculo = models.ForeignKey(
@@ -147,9 +120,8 @@ class Mantenimiento(models.Model):
 
     def __str__(self):
         return f"{self.tipo()} - {self.id_vehiculo.placa} - {self.description}"
+    
 # Modelo AlertaMantenimiento
-
-
 class AlertaMantenimiento(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     id_vehiculo = models.ForeignKey(
@@ -163,9 +135,8 @@ class AlertaMantenimiento(models.Model):
     def __str__(self):
         return f"Alerta para {self.vehiculo.placa} - {self.mensaje}"
 
+
 # Modelo ServicioMantenimiento
-
-
 class ServicioMantenimiento(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     id_vehiculo = models.ForeignKey(
@@ -176,9 +147,8 @@ class ServicioMantenimiento(models.Model):
         db_table = 'servicio_mantenimiento'
         ordering = ['id']
 
+
 # Modelo DetalleMantenimiento
-
-
 class DetalleMantenimiento(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     id_vehiculo = models.ForeignKey(

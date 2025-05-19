@@ -1,30 +1,72 @@
 {% extends 'flotas/base.html' %}
 
 {% block content %}
-<h2 class="mb-4">Lista de Conductores</h2>
-<a href="{% url 'crear_conductor' %}" class="btn btn-success mb-3">Agregar Conductor</a>
+<div class="container py-4">
+  <h1 class="mb-4 text-primary fw-bold">👨‍✈️ Lista de Conductores</h1>
 
-<div class="table-responsive">
-    <table class="table table-bordered table-hover">
-        <thead class="table-primary">
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for c in conductores %}
-            <tr>
-                <td>{{ c.id_persona.name }}</td>
-                <td>{{ c.id_persona.lastname }}</td>
-                <td>
-                    <a href="{% url 'editar_conductor' c.id %}" class="btn btn-sm btn-warning">Editar</a>
-                    <a href="{% url 'eliminar_conductor' c.id %}" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro?')">Eliminar</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
+  <a href="{% url 'crear_conductor' %}" class="btn btn-success mb-4">
+    <i class="bi bi-plus-circle"></i> Agregar Nuevo Conductor
+  </a>
+
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-striped table-hover align-middle text-center">
+      <thead class="table-primary">
+        <tr>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>DNI</th>
+          <th>Teléfono</th>
+          <th>Dirección</th>
+          <th>Licencia</th>
+          <th>Fecha Ingreso</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in conductores %}
+        <tr>
+          <td class="fw-semibold">{{ c.name }}</td>
+          <td>{{ c.lastname }}</td>
+          <td>{{ c.doc_identity }}</td>
+          <td>{{ c.phone }}</td>
+          <td>{{ c.address }}</td>
+          <td>{{ c.licence_drive }}</td>
+          <td>{{ c.date_entry|date:"d/m/Y" }}</td>
+          <td>
+            {% if c.state == 1 %}
+              <span class="badge bg-success">{{ c.get_state_display }}</span>
+            {% elif c.state == 2 %}
+              <span class="badge bg-warning text-dark">{{ c.get_state_display }}</span>
+            {% elif c.state == 3 %}
+              <span class="badge bg-danger">{{ c.get_state_display }}</span>
+            {% elif c.state == 4 %}
+              <span class="badge bg-secondary">{{ c.get_state_display }}</span>
+            {% else %}
+              <span class="badge bg-light text-dark">Desconocido</span>
+            {% endif %}
+          </td>
+          <td>
+            <a href="{% url 'editar_conductor' c.id %}" class="btn btn-sm btn-outline-primary me-1" title="Editar">
+              <i class="bi bi-pencil-fill"></i>
+            </a>
+            <form action="{% url 'eliminar_conductor' c.id %}" method="post" class="d-inline" onsubmit="return confirm('¿Eliminar conductor?');">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar">
+                <i class="bi bi-trash-fill"></i>
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="9" class="text-center text-muted fst-italic py-4">
+            No hay conductores registrados.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
+  </div>
 </div>
 {% endblock %}

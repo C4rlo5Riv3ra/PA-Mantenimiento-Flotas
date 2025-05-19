@@ -1,9 +1,76 @@
 {% extends 'flotas/base.html' %}
 
+{% block title %}Inicio - Gestión de Flotas{% endblock %}
+
 {% block content %}
-<div class="text-center">
+<div class="text-center mb-5">
     <h2 class="display-5 fw-bold">Bienvenido al Sistema de Gestión de Flotas</h2>
-    <p class="lead mt-3">Administra vehículos, conductores y mantenimientos de manera eficiente.</p>
-    <img src="https://cdn-icons-png.flaticon.com/512/854/854894.png" alt="Flotas" width="120">
+    <p class="lead text-muted">Administra vehículos, conductores y mantenimientos de manera eficiente.</p>
 </div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4">
+    <!-- Módulo Vehículos -->
+    <div class="col">
+        <a href="{% url 'listar_vehiculos' %}" class="text-decoration-none">
+            <div class="card shadow-sm h-100 border-primary border-3 hover-shadow">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+                    <i class="bi bi-car-front display-1 text-primary mb-3"></i>
+                    <h5 class="card-title fw-bold text-primary">Vehículos</h5>
+                    <p class="card-text text-muted">Gestión completa de vehículos</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Módulo Conductores -->
+    <div class="col">
+        <a href="{% url 'listar_conductores' %}" class="text-decoration-none">
+            <div class="card shadow-sm h-100 border-success border-3 hover-shadow">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+                    <i class="bi bi-person-vcard display-1 text-success mb-3"></i>
+                    <h5 class="card-title fw-bold text-success">Conductores</h5>
+                    <p class="card-text text-muted">Administración de conductores</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Módulo Mantenimientos -->
+    <div class="col">
+        <a href="{% url 'listar_mantenimientos' %}" class="text-decoration-none">
+            <div class="card shadow-sm h-100 border-warning border-3 hover-shadow">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+                    <i class="bi bi-tools display-1 text-warning mb-3"></i>
+                    <h5 class="card-title fw-bold text-warning">Mantenimientos</h5>
+                    <p class="card-text text-muted">Control y registro de mantenimientos</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Módulo Alertas -->
+    <div class="col">
+        <a href="{% url 'listar_alertas' %}" class="text-decoration-none">
+            <div class="card shadow-sm h-100 border-danger border-3 hover-shadow">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+                    <i class="bi bi-exclamation-circle display-1 text-danger mb-3"></i>
+                    <h5 class="card-title fw-bold text-danger">Alertas</h5>
+                    <p class="card-text text-muted">Notificaciones importantes</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<style>
+    .hover-shadow:hover {
+        box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        transform: translateY(-6px);
+        transition: all 0.3s ease;
+    }
+
+    a.text-decoration-none:hover {
+        text-decoration: none;
+    }
+</style>
 {% endblock %}
