@@ -24,6 +24,7 @@ def listar_vehiculos(request):
 
     return render(request, 'flotas/vehiculos/listar_vehiculos.html', {'vehiculos': vehiculos})
 
+#CREAR VEHICULO
 def crear_vehiculo(request):
     if request.method == 'POST':
         form = VehiculoForm(request.POST)
@@ -34,7 +35,7 @@ def crear_vehiculo(request):
         form = VehiculoForm()
     return render(request, 'flotas/vehiculos/crear_vehiculo.html', {'form': form})
 
-
+# EDITAR VEHICULO
 def editar_vehiculo(request, id):
     vehiculo = get_object_or_404(Vehiculo, id=id)
     if request.method == 'POST':
@@ -47,6 +48,7 @@ def editar_vehiculo(request, id):
     return render(request, 'flotas/vehiculos/editar_vehiculo.html', {'form': form})
 
 
+# ELIMINAR VEHICULO
 def eliminar_vehiculo(request, id):
     vehiculo = get_object_or_404(Vehiculo, id=id)
     if request.method == 'POST':

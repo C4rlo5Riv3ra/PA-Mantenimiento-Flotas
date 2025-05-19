@@ -13,8 +13,9 @@ class AlertaForm(forms.ModelForm):
             'fecha_alerta': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
         }
 
-#DJANGO REST FRAMEWORK
 
+
+#DJANGO REST FRAMEWORK
 class UsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
