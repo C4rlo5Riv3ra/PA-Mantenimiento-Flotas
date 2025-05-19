@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .views import *
 from uuid import UUID
 router = DefaultRouter()
-'''router.register(r'personas', PersonaViewSet)'''
+
 router.register(r'usuarios', UsuarioViewSet)
 router.register(r'tipos-vehiculo', TipoVehiculoViewSet)
 router.register(r'vehiculos', VehiculoViewSet)

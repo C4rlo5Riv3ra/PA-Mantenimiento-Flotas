@@ -21,7 +21,6 @@
             min-height: 100vh;
         }
 
-        /* Navbar fijo con sombra y transición */
         nav.navbar {
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
             z-index: 1030;
@@ -34,8 +33,8 @@
 
         main.container {
             flex: 1;
-            padding-top: 80px; /* espacio por navbar fijo */
-            padding-bottom: 60px; /* espacio para footer */
+            padding-top: 80px;
+            padding-bottom: 60px;
             animation: fadeInUp 0.6s ease;
         }
 
@@ -51,7 +50,6 @@
             margin-top: auto;
         }
 
-        /* Animación fade in */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -63,7 +61,6 @@
             }
         }
 
-        /* Nav links hover */
         .nav-link {
             font-weight: 500;
             transition: color 0.3s ease, transform 0.3s ease;
@@ -92,10 +89,39 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'listar_conductores' %}"><i class="bi bi-person-vcard me-1"></i>Conductores</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'listar_mantenimientos' %}"><i class="bi bi-tools me-1"></i>Mantenimientos</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'listar_alertas' %}"><i class="bi bi-exclamation-circle me-1"></i>Alertas</a></li>
+
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle me-1"></i>{{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li>
+                                    <form method="post" action="{% url 'account_logout' %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item">Cerrar sesión</button>
+                                    </form>
+                                </li>
+                            </ul>
+
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_login' %}">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>Iniciar sesión
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_signup' %}">
+                                <i class="bi bi-person-plus me-1"></i>Registrarse
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
+
 
     <main class="container">
         {% block content %}{% endblock %}
@@ -107,7 +133,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Navbar cambia color al hacer scroll
         window.addEventListener('scroll', function () {
             const navbar = document.querySelector('nav.navbar');
             if (window.scrollY > 10) {
