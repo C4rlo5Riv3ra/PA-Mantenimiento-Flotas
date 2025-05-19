@@ -1,0 +1,26 @@
+{% extends 'flotas/base.html' %}
+
+{% block content %}
+<h2>Historial de Mantenimientos - {{ vehiculo.placa }}</h2>
+
+{% if mantenimientos %}
+    <ul>
+    {% for mantenimiento in mantenimientos %}
+        <li>
+            <strong>{{ mantenimiento.get_tipo_display }}:</strong> {{ mantenimiento.description }} <br>
+            Fecha: {{ mantenimiento.date }} | Kilometraje: {{ mantenimiento.kilometraje }} km | Costo: S/. {{ mantenimiento.costo }}<br>
+            Taller: {{ mantenimiento.workshop }}
+            <ul>
+                {% for detalle in mantenimiento.detalles.all %}
+                    <li>Servicio: {{ detalle.servicio.description }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No hay mantenimientos registrados para este vehículo.</p>
+{% endif %}
+
+<a href="{% url 'listar_vehiculos' %}">← Volver a vehículos</a>
+{% endblock %}

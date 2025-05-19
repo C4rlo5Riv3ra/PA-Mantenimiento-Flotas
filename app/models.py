@@ -138,7 +138,9 @@ class Mantenimiento(models.Model):
     costo = models.FloatField()
     workshop = models.CharField(max_length=100)
     tipo = models.IntegerField(choices=TMantenimiento, default=TMantenimiento.PREVENTIVO)
-
+    
+    fecha_programada = models.DateField(null=True, blank=True)
+    km_programado = models.FloatField(null=True, blank=True)
     class Meta:
         db_table = 'mantenimiento'
         ordering = ['id']
@@ -158,6 +160,8 @@ class AlertaMantenimiento(models.Model):
     class Meta:
         db_table = 'alerta_mantenimiento'
         ordering = ['id']
+    def __str__(self):
+        return f"Alerta para {self.vehiculo.placa} - {self.mensaje}"
 
 # Modelo ServicioMantenimiento
 
@@ -187,3 +191,5 @@ class DetalleMantenimiento(models.Model):
     class Meta:
         db_table = 'detalle_mantenimiento'
         ordering = ['id']
+
+

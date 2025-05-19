@@ -19,6 +19,8 @@
                     <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este vehículo?')">
                         Eliminar
                     </button>
+                    <a href="{% url 'historial_mantenimiento' vehiculo_id=v.id %}">Ver historial</a>
+
                 </form>
             </div>
         </li>

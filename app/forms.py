@@ -9,6 +9,14 @@ from .models import (
 
 
 
+class AlertaForm(forms.ModelForm):
+    class Meta:
+        model = AlertaMantenimiento
+        fields = ['mensaje', 'fecha_alerta']
+        widgets = {
+            'mensaje': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+            'fecha_alerta': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+        }
 
 
 #DJANGO REST FRAMEWORK
