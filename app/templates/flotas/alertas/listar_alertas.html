@@ -1,0 +1,34 @@
+{% extends 'flotas/base.html' %}
+{% block content %}
+<h2>Alertas de Mantenimiento</h2>
+<table class="table table-bordered">
+    <thead class="table-danger">
+        <tr>
+            <th>Vehículo</th>
+            <th>Mensaje</th>
+            <th>Fecha de Alerta</th>
+            <th>Proximo mantenimiento</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for alerta in alertas %}
+        <tr>
+            <td>{{ alerta.id_vehiculo.placa }}</td>
+            <td>{{ alerta.mensaje }}</td>
+            <td>{{ alerta.fecha_alerta }}</td>
+            <td>{{ alerta.id_vehiculo.next_date_support }}</td>
+            
+            <td>
+                <a href="{% url 'editar_alerta' alerta.id %}" class="btn btn-sm btn-warning">Editar</a>
+                <a href="{% url 'eliminar_alerta' alerta.id %}" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro?')">Eliminar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No hay alertas generadas.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

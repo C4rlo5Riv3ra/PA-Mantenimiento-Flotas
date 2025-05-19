@@ -1,0 +1,11 @@
+{% extends 'flotas/base.html' %}
+
+{% block content %}
+<h2>Editar Alerta</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-success">Guardar Cambios</button>
+  <a href="{% url 'listar_alertas' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

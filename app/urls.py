@@ -1,3 +1,4 @@
+from django import views
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import *
@@ -38,5 +39,13 @@ urlpatterns = [
     path('mantenimientos/crear/', crear_mantenimiento, name='crear_mantenimiento'),
     path('mantenimientos/editar/<uuid:id>/', editar_mantenimiento, name='editar_mantenimiento'),
     path('mantenimientos/eliminar/<uuid:id>/', eliminar_mantenimiento, name='eliminar_mantenimiento'),
+
+    path('alertas/', listar_alertas, name='listar_alertas'),
+    path('alertas/editar/<uuid:alerta_id>/', editar_alerta, name='editar_alerta'),
+
+    path('alertas/eliminar/<uuid:alerta_id>/', eliminar_alerta, name='eliminar_alerta'),
+
+
+    path('vehiculos/<uuid:vehiculo_id>/historial/', historial_mantenimiento, name='historial_mantenimiento'),
 
 ]

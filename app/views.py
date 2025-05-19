@@ -1,8 +1,10 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from rest_framework import viewsets
-from .models import *
+
+from app.utils import generar_alertas
+from .models import  Vehiculo, Conductor, Mantenimiento, AlertaMantenimiento, ServicioMantenimiento, DetalleMantenimiento, Asignacion
 from .serializers import *
-from .forms import VehiculoForm, ConductorForm, MantenimientoForm
+from .forms import AlertaForm, VehiculoForm, ConductorForm, MantenimientoForm 
 # Vistas para modelos principales
 def index(request):
     return render(request, "flotas/index.html")
@@ -112,16 +114,39 @@ def eliminar_mantenimiento(request, id):
 
 
 
+def listar_alertas(request):
+    generar_alertas()  # genera o actualiza las alertas
+    alertas = AlertaMantenimiento.objects.all().order_by('-fecha_alerta')
+    return render(request, 'flotas/alertas/listar_alertas.html', {'alertas': alertas})
 
 
 
+def editar_alerta(request, alerta_id):
+    alerta = get_object_or_404(AlertaMantenimiento, pk=alerta_id)
+    if request.method == 'POST':
+        form = AlertaForm(request.POST, instance=alerta)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_alertas')
+    else:
+        form = AlertaForm(instance=alerta)
+    return render(request, 'flotas/alertas/editar_alerta.html', {'form': form})
 
+def eliminar_alerta(request, alerta_id):
+    alerta = get_object_or_404(AlertaMantenimiento, id=alerta_id)
+    if request.method == 'POST':
+        alerta.delete()
+        return redirect('listar_alertas')
+    return render(request, 'flotas/alertas/eliminar_alerta.html', {'alerta': alerta})
 
-
-
-
-
-
+def historial_mantenimiento(request, vehiculo_id):
+    vehiculo = get_object_or_404(Vehiculo, id=vehiculo_id)
+    mantenimientos = Mantenimiento.objects.filter(id_vehiculo=vehiculo).select_related('id_vehiculo').prefetch_related('detalles__servicio').order_by('-date')
+    
+    return render(request, 'flotas/historial/historial_mantenimiento.html', {
+        'vehiculo': vehiculo,
+        'mantenimientos': mantenimientos
+    })
 
 
 

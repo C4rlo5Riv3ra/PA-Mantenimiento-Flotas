@@ -1,0 +1,13 @@
+<h2>Mantenimientos realizados</h2>
+<ul>
+  {% for m in vehiculo.mantenimientos.all %}
+    <li>{{ m.date }} - {{ m.get_tipo_display }} - {{ m.description }} - S/.{{ m.costo }}</li>
+  {% endfor %}
+</ul>
+
+<h2>Alertas de mantenimiento</h2>
+<ul>
+  {% for alerta in vehiculo.alertas_mantenimiento.all %}
+    <li>{{ alerta.fecha_alerta }} - {{ alerta.mensaje }}</li>
+  {% endfor %}
+</ul>

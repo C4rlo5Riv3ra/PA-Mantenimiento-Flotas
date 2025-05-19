@@ -15,10 +15,12 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'listar_vehiculos' %}">Vehículos</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'listar_conductores' %}">Conductores</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'listar_mantenimientos' %}">Mantenimientos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'listar_alertas' %}">Alertas</a></li>
                 </ul>
             </div>
         </div>
     </nav>
+    
 
     <main class="container mt-4">
         {% block content %}{% endblock %}
