@@ -3,7 +3,11 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import *
 from uuid import UUID
+
+from .views import exportar_excel
+
 router = DefaultRouter()
+
 
 router.register(r'usuarios', UsuarioViewSet)
 router.register(r'tipos-vehiculo', TipoVehiculoViewSet)
@@ -45,5 +49,8 @@ urlpatterns = [
     path('alertas/editar/<uuid:alerta_id>/', editar_alerta, name='editar_alerta'),
     path('alertas/eliminar/<uuid:alerta_id>/', eliminar_alerta, name='eliminar_alerta'),
     path('vehiculos/<uuid:vehiculo_id>/historial/', historial_mantenimiento, name='historial_mantenimiento'),
+
+
+    path('exportar-excel/', exportar_excel, name='exportar_excel'),
 
 ]

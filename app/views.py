@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from rest_framework import viewsets
-
+from django.http import HttpResponse
+from openpyxl import Workbook
+from .models import Vehiculo
 from app.utils import generar_alertas
 from .models import  Vehiculo, Conductor, Mantenimiento, AlertaMantenimiento, ServicioMantenimiento, DetalleMantenimiento, Asignacion
 from .serializers import *
@@ -55,7 +57,12 @@ def eliminar_vehiculo(request, id):
 
 #VISTAS DE CONDUCTORES
 def listar_conductores(request):
-    conductores = Conductor.objects.all()
+    conductores_list = Conductor.objects.all()
+    paginator = Paginator(conductores_list, 5) 
+
+    page_number = request.GET.get('page')
+    conductores = paginator.get_page(page_number) 
+
     return render(request, 'flotas/conductores/listar_conductores.html', {'conductores': conductores})
 
 
@@ -89,8 +96,14 @@ def eliminar_conductor(request, id):
 
 #VISTAS DE MANTENIMIENTOS
 def listar_mantenimientos(request):
-    mantenimientos = Mantenimiento.objects.all()
+    mantenimientos_list = Mantenimiento.objects.all()
+    paginator = Paginator(mantenimientos_list, 5) 
+
+    page_number = request.GET.get('page')
+    mantenimientos = paginator.get_page(page_number) 
     return render(request, 'flotas/mantenimientos/listar_mantenimientos.html', {'mantenimientos': mantenimientos})
+
+
 
 # Crear mantenimiento
 def crear_mantenimiento(request):
@@ -126,8 +139,13 @@ def eliminar_mantenimiento(request, id):
 
 def listar_alertas(request):
     generar_alertas()  # genera o actualiza las alertas
-    alertas = AlertaMantenimiento.objects.all().order_by('-fecha_alerta')
+    alertas_list = AlertaMantenimiento.objects.all().order_by('-fecha_alerta')
+    paginator = Paginator(alertas_list, 5)
+
+    page_number = request.GET.get('page')
+    alertas = paginator.get_page(page_number)     
     return render(request, 'flotas/alertas/listar_alertas.html', {'alertas': alertas})
+
 
 
 def editar_alerta(request, alerta_id):
@@ -157,6 +175,39 @@ def historial_mantenimiento(request, vehiculo_id):
         'vehiculo': vehiculo,
         'mantenimientos': mantenimientos
     })
+
+
+def exportar_excel(request):
+    vehiculos = Vehiculo.objects.all()
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Vehículos"
+
+    # Encabezados
+    ws.append(['Placa', 'Marca', 'Modelo', 'Año', 'Tipo de Vehículo', 'Estado', 'Kilómetros', 'Último Mto.', 'Próximo Mto.'])
+
+    for v in vehiculos:
+        ws.append([
+            v.placa,
+            v.marca,
+            v.modelo,
+            v.year,
+            v.id_tipo_vehiculo.name if v.id_tipo_vehiculo else '',
+            v.get_state_display() if hasattr(v, 'get_state_display') else v.state,
+            f"{v.current_kilometers:.1f} km" if v.current_kilometers is not None else '',
+            v.last_date_support.strftime("%d/%m/%Y") if v.last_date_support else '',
+            v.next_date_support.strftime("%d/%m/%Y") if v.next_date_support else '',
+        ])
+
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    )
+    response['Content-Disposition'] = 'attachment; filename=vehiculos.xlsx'
+
+    wb.save(response)
+    return response
+
 
 
 
