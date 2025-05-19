@@ -52,5 +52,6 @@ urlpatterns = [
 
 
     path('exportar-excel/', exportar_excel, name='exportar_excel'),
-
+    path('exportar-conductores/', exportar_excel_con, name='exportar_excel_con'),
+    path('exportar-mantenimientos/', exportar_excel_man, name='exportar_excel_man'),
 ]

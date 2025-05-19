@@ -3,7 +3,6 @@ from django.db import models
 from django.utils import timezone
 from proyect.choices import *
 
-
 # Modelo Usuario
 class Usuario(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

@@ -104,7 +104,6 @@ def listar_mantenimientos(request):
     return render(request, 'flotas/mantenimientos/listar_mantenimientos.html', {'mantenimientos': mantenimientos})
 
 
-
 # Crear mantenimiento
 def crear_mantenimiento(request):
     if request.method == 'POST':
@@ -147,7 +146,6 @@ def listar_alertas(request):
     return render(request, 'flotas/alertas/listar_alertas.html', {'alertas': alertas})
 
 
-
 def editar_alerta(request, alerta_id):
     alerta = get_object_or_404(AlertaMantenimiento, pk=alerta_id)
     if request.method == 'POST':
@@ -179,7 +177,6 @@ def historial_mantenimiento(request, vehiculo_id):
 
 def exportar_excel(request):
     vehiculos = Vehiculo.objects.all()
-
     wb = Workbook()
     ws = wb.active
     ws.title = "Vehículos"
@@ -209,7 +206,74 @@ def exportar_excel(request):
     return response
 
 
+def exportar_excel_con(request):
+    conductores = Conductor.objects.all()
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Conductores"
 
+    # Encabezados
+    ws.append(['Nombre', 'Apellido', 'DNI', 'Teléfono', 'Dirección', 'Licencia', 'Fecha Ingreso', 'Estado'])
+
+    for c in conductores:
+        ws.append([
+            c.name,
+            c.lastname,
+            c.doc_identity,
+            c.phone,
+            c.address,
+            c.licence_drive,
+            c.date_entry.strftime("%d/%m/%Y") if c.date_entry else '',
+            c.get_state_display() if hasattr(c, 'get_state_display') else c.state,
+        ])
+
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    )
+    response['Content-Disposition'] = 'attachment; filename=conductores.xlsx'
+
+    wb.save(response)
+    return response
+
+def exportar_excel_man(request):
+    mantenimientos = Mantenimiento.objects.all()
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Mantenimientos"
+
+    # Encabezados según tabla en tu plantilla
+    ws.append([
+        'Tipo',
+        'Vehículo (Placa)',
+        'Descripción',
+        'Fecha',
+        'Kilometraje',
+        'Costo (S/)',
+        'Taller',
+        'Fecha Programada',
+        'KM Programado'
+    ])
+
+    for m in mantenimientos:
+        ws.append([
+            m.get_tipo_display() if hasattr(m, 'get_tipo_display') else m.tipo,
+            m.id_vehiculo.placa if m.id_vehiculo else '',
+            m.description,
+            m.date.strftime("%d/%m/%Y") if m.date else '',
+            f"{m.kilometraje:.1f} km" if m.kilometraje else '',
+            f"S/ {m.costo:.2f}" if m.costo else '',
+            m.workshop,
+            m.fecha_programada.strftime("%d/%m/%Y") if m.fecha_programada else '—',
+            f"{m.km_programado:.1f} km" if m.km_programado else '—',
+        ])
+
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    )
+    response['Content-Disposition'] = 'attachment; filename=mantenimientos.xlsx'
+
+    wb.save(response)
+    return response
 
 #DJANGO REST FRAMWORK
 
@@ -220,7 +284,6 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 class TipoVehiculoViewSet(viewsets.ModelViewSet):
     queryset = TipoVehiculo.objects.all()
     serializer_class = TipoVehiculoSerializer
-
 
 #VEHICULOS
 class VehiculoViewSet(viewsets.ModelViewSet):
