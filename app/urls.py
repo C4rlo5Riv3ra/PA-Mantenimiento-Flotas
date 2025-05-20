@@ -23,7 +23,7 @@ router.register(r'detalles-mantenimiento', DetalleMantenimientoViewSet)
 urlpatterns = [
     path('', index, name='index'), 
 
-    path('api/', include(router.urls)),# para ver apis del django rest framework
+    path('api/', include(router.urls)),
 
     
     #VEHICULOS
