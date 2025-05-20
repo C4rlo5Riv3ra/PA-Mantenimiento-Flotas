@@ -41,13 +41,20 @@
         footer {
             background-color: #343a40;
             color: #ccc;
-            text-align: center;
-            padding: 1rem;
             font-size: 0.9rem;
-            position: sticky;
-            bottom: 0;
-            width: 100%;
             margin-top: auto;
+            padding: 1.5rem 0;
+        }
+
+        footer a {
+            color: #ccc;
+            text-decoration: none;
+            margin-left: 1rem;
+        }
+
+        footer a:hover {
+            color: #ffc107;
+            text-decoration: underline;
         }
 
         @keyframes fadeInUp {
@@ -91,11 +98,12 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'listar_alertas' %}"><i class="bi bi-exclamation-circle me-1"></i>Alertas</a></li>
 
                     {% if user.is_authenticated %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle me-1"></i>{{ user.username }}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-bold text-warning" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle me-1"></i>
+                            <span class="badge bg-light text-dark">{{ user.username }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <li>
                                 <form method="post" action="{% url 'account_logout' %}" class="d-inline">
                                     {% csrf_token %}
@@ -103,32 +111,42 @@
                                 </form>
                             </li>
                         </ul>
-
-                        </li>
+                    </li>
                     {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'account_login' %}">
-                                <i class="bi bi-box-arrow-in-right me-1"></i>Iniciar sesión
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'account_signup' %}">
-                                <i class="bi bi-person-plus me-1"></i>Registrarse
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account_login' %}">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Iniciar sesión
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account_signup' %}">
+                            <i class="bi bi-person-plus me-1"></i>Registrarse
+                        </a>
+                    </li>
                     {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
 
-
     <main class="container">
         {% block content %}{% endblock %}
     </main>
 
     <footer>
-        &copy; 2025 Sistema de Gestión de Flotas. Todos los derechos reservados.
+        <div class="container">
+            <div class="row text-center text-md-start">
+                <div class="col-md-6 mb-2">
+                    <span class="text-light">&copy; 2025 Sistema de Gestión de Flotas.</span><br>
+                    <span class="text-muted">Todos los derechos reservados.</span>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#">Política de privacidad</a>
+                    <a href="#">Términos</a>
+                    <a href="#">Contacto</a>
+                </div>
+            </div>
+        </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
