@@ -37,6 +37,7 @@ class VehiculoForm(forms.ModelForm):
             'next_date_support': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
         }
         
+        
 class ConductorForm(forms.ModelForm):
     class Meta:
         model = Conductor

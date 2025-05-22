@@ -75,7 +75,7 @@ class Conductor(models.Model):
         return f"{self.name} {self.lastname}"
  
 
-# Modelo Asignacion
+# Modelo de Asignacion
 class Asignacion(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     id_vehiculo = models.ForeignKey(

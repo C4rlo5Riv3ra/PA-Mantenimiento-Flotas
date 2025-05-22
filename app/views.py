@@ -9,20 +9,34 @@ from .serializers import *
 from .forms import AlertaForm, VehiculoForm, ConductorForm, MantenimientoForm 
 from django.core.paginator import Paginator
 
-
+from django.db.models import Q
+from django.contrib.auth.decorators import login_required as loginrequired
 # Vistas para modelos principales
+@loginrequired
 def index(request):
     return render(request, "flotas/index.html")
 
 #VISTAS DE VEHICULOS
 def listar_vehiculos(request):
-    vehiculos_list = Vehiculo.objects.all().order_by('placa')  # Ordena por placa o por lo que prefieras
-    paginator = Paginator(vehiculos_list, 5)  # Muestra 10 vehículos por página
-
+    query = request.GET.get("q", "")
+    
+    if query:
+        vehiculos_list = Vehiculo.objects.filter(
+            Q(placa__icontains=query) |
+            Q(marca__icontains=query) |
+            Q(modelo__icontains=query)
+        ).order_by('placa')
+    else:
+        vehiculos_list = Vehiculo.objects.all().order_by('placa')
+    
+    paginator = Paginator(vehiculos_list, 5)
     page_number = request.GET.get('page')
-    vehiculos = paginator.get_page(page_number)  # obtiene la página correspondiente (o la 1 por defecto)
+    vehiculos = paginator.get_page(page_number)
 
-    return render(request, 'flotas/vehiculos/listar_vehiculos.html', {'vehiculos': vehiculos})
+    return render(request, 'flotas/vehiculos/listar_vehiculos.html', {
+        'vehiculos': vehiculos,
+        'query': query
+    })
 
 #CREAR VEHICULO
 def crear_vehiculo(request):
@@ -277,7 +291,6 @@ def exportar_excel_man(request):
     wb.save(response)
     return response
 
-#DJANGO REST FRAMWORK
 
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
