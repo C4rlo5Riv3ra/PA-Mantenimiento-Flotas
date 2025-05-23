@@ -17,6 +17,7 @@ def index(request):
     return render(request, "flotas/index.html")
 
 #VISTAS DE VEHICULOS
+@loginrequired
 def listar_vehiculos(request):
     query = request.GET.get("q", "")
     
@@ -39,6 +40,7 @@ def listar_vehiculos(request):
     })
 
 #CREAR VEHICULO
+@loginrequired
 def crear_vehiculo(request):
     if request.method == 'POST':
         form = VehiculoForm(request.POST)
@@ -50,6 +52,7 @@ def crear_vehiculo(request):
     return render(request, 'flotas/vehiculos/crear_vehiculo.html', {'form': form})
 
 # EDITAR VEHICULO
+@loginrequired
 def editar_vehiculo(request, id):
     vehiculo = get_object_or_404(Vehiculo, id=id)
     if request.method == 'POST':
@@ -63,6 +66,7 @@ def editar_vehiculo(request, id):
 
 
 # ELIMINAR VEHICULO
+@loginrequired
 def eliminar_vehiculo(request, id):
     vehiculo = get_object_or_404(Vehiculo, id=id)
     if request.method == 'POST':
@@ -72,6 +76,7 @@ def eliminar_vehiculo(request, id):
 
 
 #VISTAS DE CONDUCTORES
+@loginrequired
 def listar_conductores(request):
     conductores_list = Conductor.objects.all()
     paginator = Paginator(conductores_list, 5) 
@@ -82,6 +87,7 @@ def listar_conductores(request):
     return render(request, 'flotas/conductores/listar_conductores.html', {'conductores': conductores})
 
 
+@loginrequired
 def crear_conductor(request):
     if request.method == 'POST':
         form = ConductorForm(request.POST)
@@ -93,6 +99,7 @@ def crear_conductor(request):
     return render(request, 'flotas/conductores/crear_conductor.html', {'form': form})
 
 
+@loginrequired
 def editar_conductor(request, id):
     conductor = get_object_or_404(Conductor, pk=id)
     if request.method == 'POST':
@@ -105,12 +112,14 @@ def editar_conductor(request, id):
     return render(request, 'flotas/conductores/editar_conductor.html', {'form': form})
 
 
+@loginrequired
 def eliminar_conductor(request, id):
     conductor = get_object_or_404(Conductor, id=id)
     conductor.delete()
     return redirect('listar_conductores')
 
 #VISTAS DE MANTENIMIENTOS
+@loginrequired
 def listar_mantenimientos(request):
     mantenimientos_list = Mantenimiento.objects.all()
     paginator = Paginator(mantenimientos_list, 5) 
@@ -121,6 +130,7 @@ def listar_mantenimientos(request):
 
 
 # Crear mantenimiento
+@loginrequired
 def crear_mantenimiento(request):
     if request.method == 'POST':
         form = MantenimientoForm(request.POST)
@@ -132,6 +142,7 @@ def crear_mantenimiento(request):
     return render(request, 'flotas/mantenimientos/crear_mantenimiento.html', {'form': form})
 
 # Editar mantenimiento
+@loginrequired
 def editar_mantenimiento(request, id):
     mantenimiento = get_object_or_404(Mantenimiento, id=id)
     if request.method == 'POST':
@@ -144,6 +155,7 @@ def editar_mantenimiento(request, id):
     return render(request, 'flotas/mantenimientos/editar_mantenimiento.html', {'form': form})
 
 # Eliminar mantenimiento
+@loginrequired
 def eliminar_mantenimiento(request, id):
     mantenimiento = get_object_or_404(Mantenimiento, id=id)
     if request.method == 'POST':
@@ -152,6 +164,7 @@ def eliminar_mantenimiento(request, id):
     return render(request, 'flotas/mantenimientos/eliminar_mantenimiento.html', {'mantenimiento': mantenimiento})
 
 
+@loginrequired
 def listar_alertas(request):
     generar_alertas()  # genera o actualiza las alertas
     alertas_list = AlertaMantenimiento.objects.all().order_by('-fecha_alerta')
@@ -162,6 +175,7 @@ def listar_alertas(request):
     return render(request, 'flotas/alertas/listar_alertas.html', {'alertas': alertas})
 
 
+@loginrequired
 def editar_alerta(request, alerta_id):
     alerta = get_object_or_404(AlertaMantenimiento, pk=alerta_id)
     if request.method == 'POST':
@@ -174,6 +188,7 @@ def editar_alerta(request, alerta_id):
     return render(request, 'flotas/alertas/editar_alerta.html', {'form': form})
 
 
+@loginrequired
 def eliminar_alerta(request, alerta_id):
     alerta = get_object_or_404(AlertaMantenimiento, id=alerta_id)
     if request.method == 'POST':
@@ -181,6 +196,7 @@ def eliminar_alerta(request, alerta_id):
     return redirect('listar_alertas')
 
 
+@loginrequired
 def historial_mantenimiento(request, vehiculo_id):
     vehiculo = get_object_or_404(Vehiculo, id=vehiculo_id)
     mantenimientos = Mantenimiento.objects.filter(id_vehiculo=vehiculo).select_related('id_vehiculo').prefetch_related('detalles__servicio').order_by('-date')
@@ -191,6 +207,7 @@ def historial_mantenimiento(request, vehiculo_id):
     })
 
 
+@loginrequired
 def exportar_excel(request):
     vehiculos = Vehiculo.objects.all()
     wb = Workbook()
@@ -222,6 +239,7 @@ def exportar_excel(request):
     return response
 
 
+@loginrequired
 def exportar_excel_con(request):
     conductores = Conductor.objects.all()
     wb = Workbook()
@@ -251,6 +269,7 @@ def exportar_excel_con(request):
     wb.save(response)
     return response
 
+@loginrequired
 def exportar_excel_man(request):
     mantenimientos = Mantenimiento.objects.all()
     wb = Workbook()
