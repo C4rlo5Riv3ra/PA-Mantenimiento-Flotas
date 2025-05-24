@@ -1,6 +1,21 @@
 # app/utils.py
 from datetime import date, timedelta
-from .models import Vehiculo, Mantenimiento, AlertaMantenimiento
+from .models import *
+
+
+
+# utils.py (o donde prefieras)
+
+from django.http import HttpResponseForbidden
+
+def solo_roles_permitidos(roles_permitidos):
+    def decorador(view_func):
+        def wrapper(request, *args, **kwargs):
+            if request.user.id_rol in roles_permitidos:
+                return view_func(request, *args, **kwargs)
+            return HttpResponseForbidden("Acceso denegado.")
+        return wrapper
+    return decorador
 
 def generar_alertas():
     hoy = date.today()

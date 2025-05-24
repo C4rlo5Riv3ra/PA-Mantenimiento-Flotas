@@ -1,8 +1,10 @@
 from django import forms
+
 from .models import (
     Usuario, Vehiculo, Conductor, Asignacion,
     Mantenimiento, AlertaMantenimiento, ServicioMantenimiento, DetalleMantenimiento
 )
+
 
 class AlertaForm(forms.ModelForm):
     class Meta:
@@ -75,7 +77,11 @@ class MantenimientoForm(forms.ModelForm):
             'fecha_programada': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'km_programado': forms.NumberInput(attrs={'class': 'form-control'}),
         }
-        
+
+
+
+
+
 
 class AlertaMantenimientoForm(forms.ModelForm):
     class Meta:

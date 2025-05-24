@@ -14,7 +14,15 @@ from django.contrib.auth.decorators import login_required as loginrequired
 # Vistas para modelos principales
 @loginrequired
 def index(request):
-    return render(request, "flotas/index.html")
+    if request.user.is_authenticated:
+        rol = request.user.id_rol
+        if rol == 3:
+            return render(request, 'flotas/admin_dashboard.html')
+        elif rol == 2:
+            return render(request, 'flotas/tecnico_dashboard.html')
+        elif rol == 1:
+            return render(request, 'flotas/conductor_dashboard.html')
+    return redirect('account_login')
 
 #VISTAS DE VEHICULOS
 @loginrequired

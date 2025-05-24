@@ -1,0 +1,10 @@
+{% extends 'flotas/base.html' %}
+{% block title %}Panel del Técnico{% endblock %}
+
+{% block content_tecnico %}
+    <h3 class="mb-3">Panel de Técnico</h3>
+    <ul class="list-group list-group-flush mt-4">
+        <li class="list-group-item"><a href="{% url 'listar_mantenimientos' %}">Mantenimientos asignados</a></li>
+        <li class="list-group-item"><a href="{% url 'listar_alertas' %}">Alertas de vehículos</a></li>
+    </ul>
+{% endblock %}
