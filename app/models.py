@@ -19,6 +19,9 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     state = models.IntegerField(choices=estado_Usuario, default=1)
     last_date_support = models.DateField(null=True, blank=True)
     next_date_support = models.DateField(null=True, blank=True)
+
+    full_name = models.CharField(max_length=100, blank=True, null=True)
+    mobile = models.CharField(max_length=15, blank=True, null=True)
     
     # Campos obligatorios para Django
     is_active = models.BooleanField(default=True)

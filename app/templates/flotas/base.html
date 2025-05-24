@@ -99,16 +99,21 @@
                             <li class="nav-item"><a class="nav-link" href="{% url 'listar_conductores' %}"><i class="bi bi-person-vcard me-1"></i>Conductores</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'listar_mantenimientos' %}"><i class="bi bi-tools me-1"></i>Mantenimientos</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'listar_alertas' %}"><i class="bi bi-exclamation-circle me-1"></i>Alertas</a></li>
+                             <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}"><i class="bi bi-person-vcard me-1"></i>Mi perfil</a></li>
                 
 
                         {% elif user.id_rol == 2 %}
                             <!-- Menú para Técnico -->
                             <li class="nav-item"><a class="nav-link" href="{% url 'listar_mantenimientos' %}"><i class="bi bi-tools me-1"></i>Mantenimientos</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'listar_alertas' %}"><i class="bi bi-exclamation-circle me-1"></i>Alertas</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}"><i class="bi bi-person-vcard me-1"></i>Mi perfil</a></li>
+
 
                         {% elif user.id_rol == 1 %}
                             <!-- Menú para Conductor -->
                             <li class="nav-item"><a class="nav-link" href="{% url 'listar_vehiculos' %}"><i class="bi bi-car-front me-1"></i>Buscar mi Vehículo</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}"><i class="bi bi-person-vcard me-1"></i>Mi perfil</a></li>
+
                         {% endif %}
 
                         <!-- Usuario logueado: dropdown con su rol -->
