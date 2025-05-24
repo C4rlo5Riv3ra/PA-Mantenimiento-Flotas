@@ -1,0 +1,13 @@
+{% extends 'flotas/base.html' %}
+
+{% block title %}Panel del Conductor{% endblock %}
+
+{% block content_conductor %}
+<div class="card shadow p-4">
+    <h1 class="mb-3">Panel del Conductor</h1>
+    <p class="text-muted">Consulta tus vehículos asignados y alertas relevantes.</p>
+    <ul class="list-group list-group-flush mt-4">
+        <li class="list-group-item"><a href="{% url 'listar_vehiculos' %}">Mis Vehículos</a></li>
+    </ul>
+</div>
+{% endblock %}

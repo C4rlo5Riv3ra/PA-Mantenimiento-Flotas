@@ -1,24 +1,41 @@
 import uuid
 from django.db import models
 from django.utils import timezone
+from accounts.managers import UsuarioManager
 from proyect.choices import *
 
-# Modelo Usuario
-class Usuario(models.Model):
+
+from django.contrib.auth.models import AbstractBaseUser 
+from django.contrib.auth.models import Group, PermissionsMixin
+
+from accounts.managers import UsuarioManager
+from proyect.choices import estado_Usuario, rol
+
+
+class Usuario(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    email = models.CharField(max_length=60, null=False)
-    password = models.CharField(max_length=60, null=False)
-    id_rol = models.IntegerField(choices=rol)
-    '''id_person = models.ForeignKey(
-        Persona, on_delete=models.RESTRICT, null=False, related_name='usuarios')'''
-    state = models.IntegerField(
-        choices=estado_Usuario, default=estado_Usuario.ACTIVO)
+    email = models.EmailField(unique=True, max_length=60)
+    id_rol = models.IntegerField(choices=rol, default=3)
+    state = models.IntegerField(choices=estado_Usuario, default=1)
     last_date_support = models.DateField(null=True, blank=True)
     next_date_support = models.DateField(null=True, blank=True)
+    
+    # Campos obligatorios para Django
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(default=timezone.now)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    objects = UsuarioManager()
 
     class Meta:
         db_table = "usuario"
         ordering = ['id']
+
+    def __str__(self):
+        return self.email
 
 # Modelo Tipo Vehiculo
 class TipoVehiculo(models.Model):

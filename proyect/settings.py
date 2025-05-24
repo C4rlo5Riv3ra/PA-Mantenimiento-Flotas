@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'app',
+    'accounts',
+
 
     'django.contrib.sites',
     'allauth',
@@ -60,19 +62,27 @@ AUTHENTICATION_BACKENDS = (
 
 LOGIN_REDIRECT_URL = '/app/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-ACCOUNT_EMAIL_REQUIRED = False
-
-
-
 
 
 SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 ACCOUNT_SESSION_REMEMBER = True
+
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = False
+
+
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+AUTH_USER_MODEL = 'app.Usuario'
+ACCOUNT_FORMS = {
+    'signup': 'accounts.custom_forms.CustomSignupForm',
+}
 
 
 
