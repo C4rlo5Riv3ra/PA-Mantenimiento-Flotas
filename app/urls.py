@@ -1,6 +1,8 @@
 from django import views
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+
+from accounts.views import profile_update, profile_view
 from .views import *
 from uuid import UUID
 
@@ -49,6 +51,10 @@ urlpatterns = [
     path('alertas/editar/<uuid:alerta_id>/', editar_alerta, name='editar_alerta'),
     path('alertas/eliminar/<uuid:alerta_id>/', eliminar_alerta, name='eliminar_alerta'),
     path('vehiculos/<uuid:vehiculo_id>/historial/', historial_mantenimiento, name='historial_mantenimiento'),
+
+    #PERFIL
+    path('perfil/', profile_view, name='profile'),
+    path('perfil/actualizar/', profile_update, name='profile_update'),
 
 
     path('exportar-excel/', exportar_excel, name='exportar_excel'),

@@ -3,14 +3,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
-from .models import Usuario, Perfil
+from .models import Perfil
 @login_required
 def profile_view(request):
     """Vista para mostrar el perfil del usuario"""
     context = {
     'user': request.user,
     }
-    return render(request, 'accounts/profile.html', context)
+    return render(request, 'account/profile.html', context)
 @login_required
 def profile_update(request):
     """Vista para actualizar el perfil del usuario"""
@@ -56,7 +56,7 @@ def login_view(request):
     context = {
         'form': form,
                 }
-    return render(request, 'accounts/login.html', context)
+    return render(request, 'account/login.html', context)
 def logout_view(request):
     """Vista para cerrar sesión"""
     logout(request)
