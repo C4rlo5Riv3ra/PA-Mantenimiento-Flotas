@@ -11,17 +11,31 @@
       <form method="post" novalidate>
         {% csrf_token %}
         <div class="row g-3">
+
+          <!-- Campos normales del formulario excepto 'servicio_a_realizar' -->
           {% for field in form %}
-            <div class="col-md-6">
-              <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
-                {{ field.label }}
-              </label>
-              {{ field }}
-              {% if field.errors %}
-                <div class="text-danger small">{{ field.errors|join:", " }}</div>
-              {% endif %}
-            </div>
+            {% if field.name != 'servicio_a_realizar' %}
+              <div class="col-md-6">
+                <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
+                  {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                  <div class="text-danger small">{{ field.errors|join:", " }}</div>
+                {% endif %}
+              </div>
+            {% endif %}
           {% endfor %}
+
+          <!-- Campo oculto para servicio correctivo -->
+          <div class="col-md-12" id="servicio-correctivo" style="display: none;">
+            <label for="id_servicio_a_realizar" class="form-label fw-semibold">Servicio a realizar</label>
+            {{ form.servicio_a_realizar }}
+            {% if form.servicio_a_realizar.errors %}
+              <div class="text-danger small">{{ form.servicio_a_realizar.errors|join:", " }}</div>
+            {% endif %}
+          </div>
+
         </div>
 
         <div class="mt-4 d-flex justify-content-end gap-2">
@@ -36,4 +50,23 @@
     </div>
   </div>
 </div>
+
+<!-- JavaScript para mostrar/ocultar campo -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const tipoField = document.getElementById("id_tipo");
+  const servicioFieldWrapper = document.getElementById("servicio-correctivo");
+
+  function toggleServicio() {
+    if (tipoField.value === "2") { // CORRECTIVO tiene valor 2
+      servicioFieldWrapper.style.display = "block";
+    } else {
+      servicioFieldWrapper.style.display = "none";
+    }
+  }
+
+  toggleServicio();  // Ejecutar al cargar
+  tipoField.addEventListener("change", toggleServicio);  // Ejecutar al cambiar
+});
+</script>
 {% endblock %}
