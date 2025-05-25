@@ -1,5 +1,7 @@
 from django import forms
 
+from proyect.choices import TMantenimiento
+
 from .models import (
     Usuario, Vehiculo, Conductor, Asignacion,
     Mantenimiento, AlertaMantenimiento, ServicioMantenimiento, DetalleMantenimiento
@@ -63,22 +65,28 @@ class AsignacionForm(forms.ModelForm):
 
 
 class MantenimientoForm(forms.ModelForm):
+    servicio_a_realizar = forms.CharField(required=False, label="Servicio a realizar")
+
     class Meta:
         model = Mantenimiento
         fields = '__all__'
         widgets = {
-            'id_vehiculo': forms.Select(attrs={'class': 'form-control'}),
-            'description': forms.TextInput(attrs={'class': 'form-control'}),
             'date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'kilometraje': forms.NumberInput(attrs={'class': 'form-control'}),
-            'costo': forms.NumberInput(attrs={'class': 'form-control'}),
-            'workshop': forms.TextInput(attrs={'class': 'form-control'}),
-            'tipo': forms.Select(attrs={'class': 'form-control'}),
             'fecha_programada': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'km_programado': forms.NumberInput(attrs={'class': 'form-control'}),
+            'tipo': forms.Select(attrs={'class': 'form-select'}),
+            'id_vehiculo': forms.Select(attrs={'class': 'form-select'}),
+            'id_conductor': forms.Select(attrs={'class': 'form-select'}),
+            'id_alerta': forms.Select(attrs={'class': 'form-select'}),
         }
 
+    def clean(self):
+        cleaned_data = super().clean()
+        tipo = cleaned_data.get('tipo')
+        servicio = cleaned_data.get('servicio_a_realizar')
 
+        if tipo == TMantenimiento.CORRECTIVO and not servicio:
+            raise forms.ValidationError("Debe ingresar el servicio a realizar para mantenimientos correctivos.")
+        return cleaned_data
 
 
 

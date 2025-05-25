@@ -20,6 +20,7 @@
                 <th>Taller</th>
                 <th>Fecha Programada</th>
                 <th>KM Programado</th>
+                <th>Servicio a Realizar</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -35,6 +36,15 @@
                 <td>{{ m.workshop }}</td>
                 <td>{{ m.fecha_programada|default:"—" }}</td>
                 <td>{{ m.km_programado|default:"—" }}</td>
+                <td>
+                    {% if m.tipo == 2 %}
+                        <ul class="list-unstyled mb-0 text-start">
+                            {% for detalle in m.detalles.all %}
+                                <li>• {{ detalle.servicio.description }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </td>
                 <td>
                     <a href="{% url 'editar_mantenimiento' m.id %}" class="btn btn-sm btn-warning">Editar</a>
                     <form action="{% url 'eliminar_mantenimiento' m.id %}" method="post" style="display:inline;">

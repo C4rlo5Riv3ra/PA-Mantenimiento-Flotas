@@ -29,7 +29,6 @@ class estado_Asignacion(models.IntegerChoices):
 class TMantenimiento(models.IntegerChoices):
     PREVENTIVO = 1, 'Preventivo'
     CORRECTIVO = 2, 'Correctivo'
-    GENERAL = 3, 'General'
 
 class estado_Alerta(models.IntegerChoices):
     ATENTIDA = 1, 'Atentida'
