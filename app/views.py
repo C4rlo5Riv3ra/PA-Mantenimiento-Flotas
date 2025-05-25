@@ -14,6 +14,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required as loginrequired
 # Vistas para modelos principales
+
 @loginrequired
 def index(request):
     if request.user.is_authenticated:

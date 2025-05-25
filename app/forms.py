@@ -64,19 +64,70 @@ class AsignacionForm(forms.ModelForm):
         fields = '__all__'
 
 
+
 class MantenimientoForm(forms.ModelForm):
-    servicio_a_realizar = forms.CharField(required=False, label="Servicio a realizar")
+    servicio_a_realizar = forms.CharField(
+        required=False,
+        label="Servicio a realizar",
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'placeholder': 'Describa el servicio a realizar...',
+            'rows': 3
+        })
+    )
 
     class Meta:
         model = Mantenimiento
         fields = '__all__'
+
         widgets = {
-            'date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'fecha_programada': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'tipo': forms.Select(attrs={'class': 'form-select'}),
-            'id_vehiculo': forms.Select(attrs={'class': 'form-select'}),
-            'id_conductor': forms.Select(attrs={'class': 'form-select'}),
-            'id_alerta': forms.Select(attrs={'class': 'form-select'}),
+            'date': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-control',
+                'placeholder': 'Seleccione la fecha de mantenimiento'
+            }),
+            'fecha_programada': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-control',
+                'placeholder': 'Seleccione la fecha programada'
+            }),
+            'tipo': forms.Select(attrs={
+                'class': 'form-select',
+                'title': 'Tipo de mantenimiento'
+            }),
+            'id_vehiculo': forms.Select(attrs={
+                'class': 'form-select',
+                'title': 'Vehículo'
+            }),
+            'id_conductor': forms.Select(attrs={
+                'class': 'form-select',
+                'title': 'Conductor'
+            }),
+            'id_alerta': forms.Select(attrs={
+                'class': 'form-select',
+                'title': 'Alerta asociada (si aplica)'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ingrese una descripción detallada...',
+                'rows': 3
+            }),
+            'kilometraje': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ingrese el kilometraje actual'
+            }),
+            'costo': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ingrese el costo en soles'
+            }),
+            'workshop': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Nombre del taller o proveedor del servicio'
+            }),
+            'km_programado': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Kilometraje al que se programó el mantenimiento'
+            }),
         }
 
     def clean(self):
@@ -87,8 +138,6 @@ class MantenimientoForm(forms.ModelForm):
         if tipo == TMantenimiento.CORRECTIVO and not servicio:
             raise forms.ValidationError("Debe ingresar el servicio a realizar para mantenimientos correctivos.")
         return cleaned_data
-
-
 
 
 class AlertaMantenimientoForm(forms.ModelForm):

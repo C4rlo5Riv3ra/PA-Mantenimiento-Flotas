@@ -4,16 +4,17 @@
 <div class="container py-4">
   <h1 class="mb-4 text-primary fw-bold">👨‍✈️ Lista de Conductores</h1>
 
-  <a href="{% url 'crear_conductor' %}" class="btn btn-success mb-4">
-    <i class="bi bi-plus-circle"></i> Agregar Nuevo Conductor
-  </a>
+  <div class="d-flex flex-wrap gap-2 mb-4">
+    <a href="{% url 'crear_conductor' %}" class="btn btn-success">
+      <i class="bi bi-plus-circle"></i> Agregar Nuevo Conductor
+    </a>
+    <a href="{% url 'exportar_excel_con' %}" class="btn btn-primary">
+      <i class="bi bi-file-earmark-excel"></i> Exportar a Excel
+    </a>
+  </div>
 
-  <a href="{% url 'exportar_excel_con' %}" class="btn btn-primary mb-4 me-2">
-    <i class="bi bi-file-earmark-excel"></i> Exportar a Excel
-  </a>
-
-  <div class="table-responsive shadow-sm rounded">
-    <table class="table table-striped table-hover align-middle text-center">
+  <div class="table-responsive shadow rounded bg-white">
+    <table class="table table-hover align-middle text-center mb-0">
       <thead class="table-primary">
         <tr>
           <th>Nombre</th>
@@ -54,12 +55,32 @@
             <a href="{% url 'editar_conductor' c.id %}" class="btn btn-sm btn-outline-primary me-1" title="Editar">
               <i class="bi bi-pencil-fill"></i>
             </a>
-            <form action="{% url 'eliminar_conductor' c.id %}" method="post" class="d-inline" onsubmit="return confirm('¿Eliminar conductor?');">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar">
-                <i class="bi bi-trash-fill"></i>
-              </button>
-            </form>
+            <!-- Botón que abre el modal -->
+            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalEliminarConductor{{ c.id }}" title="Eliminar">
+              <i class="bi bi-trash-fill"></i>
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modalEliminarConductor{{ c.id }}" tabindex="-1" aria-labelledby="modalLabel{{ c.id }}" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="modalLabel{{ c.id }}">Confirmar Eliminación</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                  </div>
+                  <div class="modal-body text-start">
+                    ¿Estás seguro de que deseas eliminar al conductor <strong>{{ c.name }} {{ c.lastname }}</strong>? Esta acción no se puede deshacer.
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                    <form action="{% url 'eliminar_conductor' c.id %}" method="post">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
           </td>
         </tr>
         {% empty %}
@@ -71,43 +92,39 @@
         {% endfor %}
       </tbody>
     </table>
-
-
-    <nav aria-label="Page navigation">
-      <ul class="pagination justify-content-start">
-        {% if conductores.has_previous %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ vehiculos.previous_page_number }}" aria-label="Anterior">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-        {% else %}
-          <li class="page-item disabled">
-            <span class="page-link">&laquo;</span>
-          </li>
-        {% endif %}
-
-        {% for num in conductores.paginator.page_range %}
-          {% if num == conductores.number %}
-            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-          {% elif num > conductores.number|add:'-3' and num < conductores.number|add:'3' %}
-            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
-          {% endif %}
-        {% endfor %}
-
-        {% if conductores.has_next %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ conductores.next_page_number }}" aria-label="Siguiente">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        {% else %}
-          <li class="page-item disabled">
-            <span class="page-link">&raquo;</span>
-          </li>
-        {% endif %}
-      </ul>
-    </nav>
   </div>
+
+  <!-- Paginación -->
+  <nav aria-label="Page navigation" class="mt-3">
+    <ul class="pagination justify-content-start">
+      {% if conductores.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ conductores.previous_page_number }}" aria-label="Anterior">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+      {% endif %}
+
+      {% for num in conductores.paginator.page_range %}
+        {% if num == conductores.number %}
+          <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% elif num > conductores.number|add:'-3' and num < conductores.number|add:'3' %}
+          <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+        {% endif %}
+      {% endfor %}
+
+      {% if conductores.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ conductores.next_page_number }}" aria-label="Siguiente">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+      {% endif %}
+    </ul>
+  </nav>
 </div>
 {% endblock %}

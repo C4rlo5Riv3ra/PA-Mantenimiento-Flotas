@@ -46,12 +46,40 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{% url 'editar_mantenimiento' m.id %}" class="btn btn-sm btn-warning">Editar</a>
-                    <form action="{% url 'eliminar_mantenimiento' m.id %}" method="post" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este mantenimiento?')">Eliminar</button>
-                    </form>
-                </td>
+                  <div class="d-flex">
+                    <a href="{% url 'editar_mantenimiento' m.id %}" class="btn btn-sm btn-outline-primary me-1" title="Editar">
+                        <i class="bi bi-pencil-fill"></i>
+                    </a>
+
+                    <!-- Botón que abre el modal -->
+                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalEliminarMantenimiento{{ m.id }}" title="Eliminar">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                  </div>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="modalEliminarMantenimiento{{ m.id }}" tabindex="-1" aria-labelledby="modalLabel{{ m.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                          <h5 class="modal-title" id="modalLabel{{ m.id }}">Confirmar Eliminación</h5>
+                          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body text-start">
+                          ¿Estás seguro de que deseas eliminar el mantenimiento para el vehículo <strong>{{ m.id_vehiculo.placa }}</strong> con descripción <strong>{{ m.description }}</strong>? Esta acción no se puede deshacer.
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                          <form action="{% url 'eliminar_mantenimiento' m.id %}" method="post" class="m-0 p-0">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </td>
+
             </tr>
             {% endfor %}
         </tbody>
@@ -61,7 +89,7 @@
       <ul class="pagination justify-content-start">
         {% if mantenimientos.has_previous %}
           <li class="page-item">
-            <a class="page-link" href="?page={{mantenimientos.previous_page_number }}" aria-label="Anterior">
+            <a class="page-link" href="?page={{ mantenimientos.previous_page_number }}" aria-label="Anterior">
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>

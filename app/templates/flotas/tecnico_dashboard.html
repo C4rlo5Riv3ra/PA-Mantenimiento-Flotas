@@ -1,10 +1,73 @@
 {% extends 'flotas/base.html' %}
 {% block title %}Panel del Técnico{% endblock %}
 
-{% block content_tecnico %}
-    <h3 class="mb-3">Panel de Técnico</h3>
-    <ul class="list-group list-group-flush mt-4">
-        <li class="list-group-item"><a href="{% url 'listar_mantenimientos' %}">Mantenimientos asignados</a></li>
-        <li class="list-group-item"><a href="{% url 'listar_alertas' %}">Alertas de vehículos</a></li>
-    </ul>
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="display-4 fw-semibold text-primary-emphasis">Panel del Técnico</h1>
+    <p class="lead text-muted">Gestiona tus mantenimientos asignados y recibe alertas importantes.</p>
+</div>
+
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <!-- Módulo Mantenimientos Asignados -->
+        <div class="col">
+            <a href="{% url 'listar_mantenimientos' %}" class="card-link">
+                <div class="card module-card border-start border-4 border-warning shadow-sm h-100 text-center">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <i class="bi bi-tools icon-style text-warning"></i>
+                        <h5 class="card-title mt-3 fw-bold">Mantenimientos asignados</h5>
+                        <p class="card-text text-muted">Revisa y gestiona tus tareas de mantenimiento</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Módulo Alertas de Vehículos -->
+        <div class="col">
+            <a href="{% url 'listar_alertas' %}" class="card-link">
+                <div class="card module-card border-start border-4 border-danger shadow-sm h-100 text-center">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <i class="bi bi-exclamation-circle icon-style text-danger"></i>
+                        <h5 class="card-title mt-3 fw-bold">Alertas de vehículos</h5>
+                        <p class="card-text text-muted">Notificaciones importantes sobre vehículos</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card-link {
+        text-decoration: none;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: block;
+    }
+
+    .card-link:hover .module-card {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .module-card {
+        border-radius: 1rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .icon-style {
+        font-size: 3rem;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+    }
+
+    .card-text {
+        font-size: 0.95rem;
+    }
+
+    .text-primary-emphasis {
+        color: #0d6efd;
+    }
+</style>
 {% endblock %}

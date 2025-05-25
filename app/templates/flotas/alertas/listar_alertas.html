@@ -29,55 +29,77 @@
               <a href="{% url 'editar_alerta' alerta.id %}" class="btn btn-sm btn-warning fw-bold">
                 <i class="bi bi-pencil-square"></i> Editar
               </a>
-              <form action="{% url 'eliminar_alerta' alerta.id %}" method="post" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-sm btn-danger fw-bold" onclick="return confirm('¿Estás seguro de eliminar esta alerta?')">
-                  <i class="bi bi-trash3-fill"></i> Eliminar
-                </button>
-              </form>
+
+              <!-- Botón para abrir el modal -->
+              <button type="button" class="btn btn-sm btn-danger fw-bold" data-bs-toggle="modal" data-bs-target="#modalEliminar{{ alerta.id }}">
+                <i class="bi bi-trash3-fill"></i> Eliminar
+              </button>
+
+              <!-- Modal de Confirmación -->
+              <div class="modal fade" id="modalEliminar{{ alerta.id }}" tabindex="-1" aria-labelledby="modalEliminarLabel{{ alerta.id }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                      <h5 class="modal-title" id="modalEliminarLabel{{ alerta.id }}">
+                        <i class="bi bi-exclamation-triangle-fill"></i> Confirmar Eliminación
+                      </h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                      ¿Estás seguro de que deseas eliminar la alerta del vehículo <strong>{{ alerta.id_vehiculo.placa }}</strong>?
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                      <form action="{% url 'eliminar_alerta' alerta.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Fin del modal -->
+
             </td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
 
+      <!-- Paginación -->
       <nav aria-label="Page navigation">
-      <ul class="pagination justify-content-start">
-        {% if alertas.has_previous %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ alertas.previous_page_number }}" aria-label="Anterior">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-        {% else %}
-          <li class="page-item disabled">
-            <span class="page-link">&laquo;</span>
-          </li>
-        {% endif %}
-
-        {% for num in alertas.paginator.page_range %}
-          {% if num == alertas.number %}
-            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-          {% elif num > alertas.number|add:'-3' and num < alertas.number|add:'3' %}
-            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+        <ul class="pagination justify-content-start">
+          {% if alertas.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ alertas.previous_page_number }}" aria-label="Anterior">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
           {% endif %}
-        {% endfor %}
 
-        {% if alertas.has_next %}
-          <li class="page-item">
-            <a class="page-link" href="?page={{ alertas.next_page_number }}" aria-label="Siguiente">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        {% else %}
-          <li class="page-item disabled">
-            <span class="page-link">&raquo;</span>
-          </li>
-        {% endif %}
-      </ul>
-    </nav>
+          {% for num in alertas.paginator.page_range %}
+            {% if num == alertas.number %}
+              <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% elif num > alertas.number|add:'-3' and num < alertas.number|add:'3' %}
+              <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+          {% endfor %}
 
+          {% if alertas.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ alertas.next_page_number }}" aria-label="Siguiente">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+          {% endif %}
+        </ul>
+      </nav>
     </div>
+
   {% else %}
     <div class="alert alert-info text-center" role="alert">
       <i class="bi bi-info-circle-fill"></i> No hay alertas generadas.

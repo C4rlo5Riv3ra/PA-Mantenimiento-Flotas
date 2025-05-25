@@ -1,16 +1,100 @@
 {% extends 'flotas/base.html' %}
 
-{% block title %}Panel de Administración{% endblock %}
+{% block title %}Inicio - Gestión de Flotas{% endblock %}
 
-{% block content_admin %}
-<div class="card shadow p-4">
-    <h1 class="mb-3">Bienvenido, Administrador</h1>
-    <p class="text-muted">Desde este panel puedes gestionar todo el sistema.</p>
-    <ul class="list-group list-group-flush mt-4">
-        <li class="list-group-item"><a href="{% url 'listar_vehiculos' %}">Gestión de Vehículos</a></li>
-        <li class="list-group-item"><a href="{% url 'listar_conductores' %}">Gestión de Conductores</a></li>
-        <li class="list-group-item"><a href="{% url 'listar_mantenimientos' %}">Revisión de Mantenimientos</a></li>
-        <li class="list-group-item"><a href="{% url 'listar_alertas' %}">Alertas del Sistema</a></li>
-    </ul>
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="display-4 fw-semibold text-primary-emphasis">Sistema de Gestión de Flotas</h1>
+    <p class="lead text-muted">Administra tus vehículos, conductores y mantenimientos con facilidad y eficiencia.</p>
 </div>
+
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4">
+        <!-- Módulo Vehículos -->
+        <div class="col">
+            <a href="{% url 'listar_vehiculos' %}" class="card-link">
+                <div class="card module-card border-start border-4 border-primary shadow-sm h-100 text-center">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <i class="bi bi-car-front icon-style text-primary"></i>
+                        <h5 class="card-title mt-3 fw-bold">Vehículos</h5>
+                        <p class="card-text text-muted">Gestión completa de vehículos</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Módulo Conductores -->
+        <div class="col">
+            <a href="{% url 'listar_conductores' %}" class="card-link">
+                <div class="card module-card border-start border-4 border-success shadow-sm h-100 text-center">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <i class="bi bi-person-vcard icon-style text-success"></i>
+                        <h5 class="card-title mt-3 fw-bold">Conductores</h5>
+                        <p class="card-text text-muted">Administración de conductores</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Módulo Mantenimientos -->
+        <div class="col">
+            <a href="{% url 'listar_mantenimientos' %}" class="card-link">
+                <div class="card module-card border-start border-4 border-warning shadow-sm h-100 text-center">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <i class="bi bi-tools icon-style text-warning"></i>
+                        <h5 class="card-title mt-3 fw-bold">Mantenimientos</h5>
+                        <p class="card-text text-muted">Control y registro de mantenimientos</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Módulo Alertas -->
+        <div class="col">
+            <a href="{% url 'listar_alertas' %}" class="card-link">
+                <div class="card module-card border-start border-4 border-danger shadow-sm h-100 text-center">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <i class="bi bi-exclamation-circle icon-style text-danger"></i>
+                        <h5 class="card-title mt-3 fw-bold">Alertas</h5>
+                        <p class="card-text text-muted">Notificaciones importantes</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card-link {
+        text-decoration: none;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: block;
+    }
+
+    .card-link:hover .module-card {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .module-card {
+        border-radius: 1rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .icon-style {
+        font-size: 3rem;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+    }
+
+    .card-text {
+        font-size: 0.95rem;
+    }
+
+    .text-primary-emphasis {
+        color: #0d6efd;
+    }
+</style>
 {% endblock %}

@@ -16,7 +16,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -27,7 +26,6 @@ SECRET_KEY = 'django-insecure-@i3)is9os!c#&5(bpmu*!)khut-ss9(=(i+59%$zijbp)&sur5
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -41,8 +39,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'app',
     'accounts',
-
-
+    
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -51,7 +48,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'widget_tweaks',
 ]
-
 
 SITE_ID = 1
 
@@ -65,16 +61,13 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-
 SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 ACCOUNT_SESSION_REMEMBER = True
 
-
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_USERNAME_REQUIRED = False
-
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
@@ -83,8 +76,6 @@ AUTH_USER_MODEL = 'app.Usuario'
 ACCOUNT_FORMS = {
     'signup': 'accounts.custom_forms.CustomSignupForm',
 }
-
-
 
 # DRF + SIMPLE JWT
 REST_FRAMEWORK = {
@@ -107,12 +98,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-
-
-
-
-
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -123,7 +108,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
 
 ROOT_URLCONF = 'proyect.urls'
 
@@ -159,7 +143,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -178,7 +161,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -189,7 +171,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
