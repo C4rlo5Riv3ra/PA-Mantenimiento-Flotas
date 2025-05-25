@@ -2,6 +2,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from rest_framework import viewsets
 from django.http import HttpResponse
 from openpyxl import Workbook
+
+from proyect.choices import TMantenimiento
 from .models import Vehiculo
 from app.utils import generar_alertas
 from .models import  Vehiculo, Conductor, Mantenimiento, AlertaMantenimiento, ServicioMantenimiento, DetalleMantenimiento, Asignacion
@@ -143,7 +145,18 @@ def crear_mantenimiento(request):
     if request.method == 'POST':
         form = MantenimientoForm(request.POST)
         if form.is_valid():
-            form.save()
+            mantenimiento = form.save()
+            if mantenimiento.tipo == TMantenimiento.CORRECTIVO:
+                servicio_texto = form.cleaned_data.get('servicio_a_realizar')
+                servicio = ServicioMantenimiento.objects.create(
+                    id_vehiculo=mantenimiento.id_vehiculo,
+                    description=servicio_texto
+                )
+                mantenimiento_detalle = DetalleMantenimiento.objects.create(
+                    id_vehiculo=mantenimiento.id_vehiculo,
+                    mantenimiento=mantenimiento,
+                    servicio=servicio
+                )
             return redirect('listar_mantenimientos')
     else:
         form = MantenimientoForm()
