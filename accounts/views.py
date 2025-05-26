@@ -11,6 +11,7 @@ def profile_view(request):
     'user': request.user,
     }
     return render(request, 'account/profile.html', context)
+
 @login_required
 def profile_update(request):
     """Vista para actualizar el perfil del usuario"""

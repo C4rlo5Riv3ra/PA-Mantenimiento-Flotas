@@ -37,6 +37,5 @@ class estado_Alerta(models.IntegerChoices):
     VENCIDA = 4, 'Vencida'
 
 class rol(models.IntegerChoices):
-    CONDUCTOR = 1, 'Conductor'
     TECNICO = 2, 'Tecnico'
     ADMIN = 3, 'Admin'

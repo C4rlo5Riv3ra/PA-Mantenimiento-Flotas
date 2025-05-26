@@ -27,8 +27,8 @@
         }
 
         nav.navbar.scrolled {
-            background-color: #0d6efd !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background-color: #0056b3 !important; /* Más oscuro al hacer scroll */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         main.container {
@@ -68,14 +68,41 @@
             }
         }
 
-        .nav-link {
-            font-weight: 500;
+        /* Estilo para los enlaces del menú, agrandando texto y espaciado */
+        .navbar-nav .nav-link {
+            font-size: 1.3rem;      
+            padding: 1rem 1.2rem;
+            font-weight: 600;
+            color: #fff !important;
             transition: color 0.3s ease, transform 0.3s ease;
         }
 
-        .nav-link:hover {
+        .navbar-nav .nav-link:hover {
             color: #ffc107 !important;
             transform: translateY(-2px);
+        }
+
+        /* Estilo para el nombre/marca del navbar */
+        .navbar-brand {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #fff !important;
+        }
+
+        /* Estilos para dropdown de usuario */
+        .dropdown-menu {
+            font-size: 1rem;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            transition: background-color 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
         }
     </style>
 
@@ -99,21 +126,12 @@
                             <li class="nav-item"><a class="nav-link" href="{% url 'listar_conductores' %}"><i class="bi bi-person-vcard me-1"></i>Conductores</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'listar_mantenimientos' %}"><i class="bi bi-tools me-1"></i>Mantenimientos</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'listar_alertas' %}"><i class="bi bi-exclamation-circle me-1"></i>Alertas</a></li>
-                             <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}"><i class="bi bi-person-vcard me-1"></i>Mi perfil</a></li>
-                
-
+                            <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}"><i class="bi bi-person-vcard me-1"></i>Mi perfil</a></li>
                         {% elif user.id_rol == 2 %}
                             <!-- Menú para Técnico -->
                             <li class="nav-item"><a class="nav-link" href="{% url 'listar_mantenimientos' %}"><i class="bi bi-tools me-1"></i>Mantenimientos</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'listar_alertas' %}"><i class="bi bi-exclamation-circle me-1"></i>Alertas</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}"><i class="bi bi-person-vcard me-1"></i>Mi perfil</a></li>
-
-
-                        {% elif user.id_rol == 1 %}
-                            <!-- Menú para Conductor -->
-                            <li class="nav-item"><a class="nav-link" href="{% url 'listar_vehiculos' %}"><i class="bi bi-car-front me-1"></i>Buscar mi Vehículo</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}"><i class="bi bi-person-vcard me-1"></i>Mi perfil</a></li>
-
+                            <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}"><i class="bi bi-person-vcard me-1"></i>Mi perfil</a></li>                     
                         {% endif %}
 
                         <!-- Usuario logueado: dropdown con su rol -->
@@ -152,8 +170,6 @@
                         </li>
                     {% endif %}
                 </ul>
-
-               
             </div>
         </div>
     </nav>
@@ -161,22 +177,29 @@
         {% block content %}{% endblock %}
     </main>
 
-  
-    <footer>
+    <footer class="bg-dark text-light py-4 mt-5 border-top shadow-lg">
         <div class="container">
-            <div class="row text-center text-md-start">
-                <div class="col-md-6 mb-2">
-                    <span class="text-light">&copy; 2025 Sistema de Gestión de Flotas.</span><br>
-                    <span class="text-muted">Todos los derechos reservados.</span>
+            <div class="row text-center text-md-start align-items-center">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <h5 class="fw-bold mb-1">Sistema de Gestión de Flotas</h5>
+                    <p class="mb-1">&copy; 2025 Todos los derechos reservados.</p>
+                    <small class="text-muted">Desarrollado por tu empresa o equipo</small>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <a href="#">Política de privacidad</a>
-                    <a href="#">Términos</a>
-                    <a href="#">Contacto</a>
+                    <a href="#" class="text-light text-decoration-none mx-2">
+                        <i class="bi bi-shield-lock-fill me-1"></i>Política de privacidad
+                    </a>
+                    <a href="#" class="text-light text-decoration-none mx-2">
+                        <i class="bi bi-file-earmark-text-fill me-1"></i>Términos
+                    </a>
+                    <a href="#" class="text-light text-decoration-none mx-2">
+                        <i class="bi bi-envelope-fill me-1"></i>Contacto
+                    </a>
                 </div>
             </div>
         </div>
     </footer>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>

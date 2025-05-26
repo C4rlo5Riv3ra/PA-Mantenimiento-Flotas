@@ -2,7 +2,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from rest_framework import viewsets
 from django.http import HttpResponse
 from openpyxl import Workbook
-
+from django.http import JsonResponse
+from .models import Vehiculo
 from proyect.choices import TMantenimiento
 from .models import Vehiculo
 from app.utils import generar_alertas
@@ -15,6 +16,46 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required as loginrequired
 # Vistas para modelos principales
 
+# flotas/views.py
+from django.http import HttpResponse
+import openpyxl
+from .models import Mantenimiento, Vehiculo
+
+
+@loginrequired
+def exportar_excel_historial(request, vehiculo_id):
+    vehiculo = Vehiculo.objects.get(id=vehiculo_id)
+    mantenimientos = Mantenimiento.objects.filter(id_vehiculo=vehiculo)
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Historial de Mantenimientos"
+
+    # Escribir encabezados
+    ws.append(["Tipo", "Descripción", "Fecha", "Kilometraje (km)", "Costo (S/.)", "Taller", "Servicios"])
+
+    # Escribir datos
+    for m in mantenimientos:
+        servicios = ", ".join([detalle.servicio.description for detalle in m.detalles.all()])
+        ws.append([
+            m.get_tipo_display(),
+            m.description,
+            m.date.strftime("%d/%m/%Y"),
+            m.kilometraje,
+            float(m.costo),
+            m.workshop,
+            servicios
+        ])
+
+    response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    filename = f"historial_{vehiculo.placa}.xlsx"
+    response["Content-Disposition"] = f'attachment; filename="{filename}"'
+    wb.save(response)
+    return response
+
+
+
+
 @loginrequired
 def index(request):
     if request.user.is_authenticated:
@@ -23,8 +64,6 @@ def index(request):
             return render(request, 'flotas/admin_dashboard.html')
         elif rol == 2:
             return render(request, 'flotas/tecnico_dashboard.html')
-        elif rol == 1:
-            return render(request, 'flotas/conductor_dashboard.html')
     return redirect('account_login')
 
 #VISTAS DE VEHICULOS
@@ -75,6 +114,18 @@ def editar_vehiculo(request, id):
         form = VehiculoForm(instance=vehiculo)
     return render(request, 'flotas/vehiculos/editar_vehiculo.html', {'form': form})
 
+
+def filtrar_placas(request):
+    query = request.GET.get('term', '')
+    vehiculos = Vehiculo.objects.filter(placa__icontains=query)[:10]
+    resultados = []
+    for v in vehiculos:
+        resultados.append({
+            'id': v.id,
+            'label': v.placa,
+            'value': v.placa,
+        })
+    return JsonResponse(resultados, safe=False)
 
 # ELIMINAR VEHICULO
 @loginrequired

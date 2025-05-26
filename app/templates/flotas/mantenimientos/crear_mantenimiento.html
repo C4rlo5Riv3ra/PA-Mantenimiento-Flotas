@@ -12,9 +12,16 @@
         {% csrf_token %}
         <div class="row g-3">
 
-          <!-- Campos normales del formulario excepto 'servicio_a_realizar' -->
+          <!-- Búsqueda por placa -->
+          <div class="col-md-6">
+            <label for="placa_busqueda" class="form-label fw-semibold">Buscar placa del vehículo</label>
+            <input type="text" id="placa_busqueda" class="form-control" placeholder="Escribe la placa...">
+            <input type="hidden" name="id_vehiculo" id="id_vehiculo">
+          </div>
+
+          <!-- Resto de campos (excepto 'servicio_a_realizar') -->
           {% for field in form %}
-            {% if field.name != 'servicio_a_realizar' %}
+            {% if field.name != 'id_vehiculo' and field.name != 'servicio_a_realizar' %}
               <div class="col-md-6">
                 <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
                   {{ field.label }}
@@ -27,7 +34,7 @@
             {% endif %}
           {% endfor %}
 
-          <!-- Campo oculto para servicio correctivo -->
+          <!-- Campo solo visible si tipo = CORRECTIVO -->
           <div class="col-md-12" id="servicio-correctivo" style="display: none;">
             <label for="id_servicio_a_realizar" class="form-label fw-semibold">Servicio a realizar</label>
             {{ form.servicio_a_realizar }}
@@ -35,7 +42,6 @@
               <div class="text-danger small">{{ form.servicio_a_realizar.errors|join:", " }}</div>
             {% endif %}
           </div>
-
         </div>
 
         <div class="mt-4 d-flex justify-content-end gap-2">
@@ -51,22 +57,41 @@
   </div>
 </div>
 
-<!-- JavaScript para mostrar/ocultar campo -->
+<!-- JS para mostrar campo correctivo -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   const tipoField = document.getElementById("id_tipo");
   const servicioFieldWrapper = document.getElementById("servicio-correctivo");
 
   function toggleServicio() {
-    if (tipoField.value === "2") { // CORRECTIVO tiene valor 2
+    if (tipoField && tipoField.value === "2") {
       servicioFieldWrapper.style.display = "block";
     } else {
       servicioFieldWrapper.style.display = "none";
     }
   }
 
-  toggleServicio();  // Ejecutar al cargar
-  tipoField.addEventListener("change", toggleServicio);  // Ejecutar al cambiar
+  toggleServicio();
+  if (tipoField) {
+    tipoField.addEventListener("change", toggleServicio);
+  }
+});
+</script>
+
+<!-- jQuery UI para autocompletar -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+<script>
+$(function () {
+  $("#placa_busqueda").autocomplete({
+    source: "{% url 'filtrar_placas' %}",
+    minLength: 2,
+    select: function (event, ui) {
+      $("#id_vehiculo").val(ui.item.id);  // Guarda ID oculto
+    }
+  });
 });
 </script>
 {% endblock %}
