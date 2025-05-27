@@ -27,9 +27,7 @@ python -m venv .venv
 3. Instalar las dependencias
 
 ```bash
-pip install django
-pip install psycopg2-binary
-pip install mysqlclient
+pip install -r requirements.txt
 ```
 
 4. Crear la base de datos
